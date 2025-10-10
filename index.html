@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Organograma Tetra+ 2025</title>
+  <style>
+    :root {
+      --azul-escuro: #242c5a;
+      --azul-claro: #46a2da;
+      --azul-agua: #30D5C8;
+      --verde-agua: #6fc09e;
+      --cinza: #f4f6fa;
+      --texto: #1a1a1a;
+      --laranja: #ff9052;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--cinza);
+      color: var(--texto);
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      height: 100%;
+      overflow: auto;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
+      color: white;
+      padding: 24px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      text-align: center;
+    }
+    
+    .header .controls {
+      max-width: 1400px;
+      margin: 12px auto 0;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      background: white;
+      color: var(--azul-escuro);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .search-box {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 250px;
+    }
+    
+    .chart-wrapper {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .org-tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    
+    .level-row {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    .card {
+      background: white;
+      border: 3px solid var(--azul-claro);
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 200px;
+      max-width: 280px;
+      position: relative;
+    }
+    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+      border-color: var(--azul-escuro);
+    }
+    
+    .card.active {
+      border-color: var(--azul-escuro);
+      box-shadow: 0 0 0 4px rgba(36, 44, 90, 0.1);
+    }
+    
+    .card.ceo {
+      border-color: var(--azul-escuro);
+      background: linear-gradient(135deg, #fff 0%, #e8f2f7 100%);
+      border-width: 4px;
+    }
+    
+    .card.gerente {
+      border-color: var(--azul-claro);
+    }
+    
+    .card.coordenador {
+      border-color: var(--verde-agua);
+    }
+    
+    .card.projeto {
+      border-color: var(--laranja);
+      background: #fff9f5;
+    }
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .photo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid var(--azul-claro);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    
+    .card-info {
+      flex: 1;
+    }
+    
+    .card-name {
+      font-weight: 700;
+      font-size: 16px;
+      margin: 0 0 4px 0;
+      color: var(--azul-escuro);
+    }
+    
+    .card-role {
+      font-size: 13px;
+      color: #666;
+      margin: 0;
+    }
+    
+    .expand-icon {
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--azul-claro);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    
+    .expand-icon:hover {
+      background: var(--azul-escuro);
+      transform: translateX(-50%) scale(1.1);
+    }
+    
+    .expand-icon.expanded {
+      background: var(--verde-agua);
+    }
+    
+    .connector {
+      width: 3px;
+      height: 30px;
+      background: var(--verde-agua);
+      margin: 0 auto;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.4s ease;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 3px solid var(--verde-agua);
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--azul-escuro);
+      margin: 0;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #999;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    
+    .close-btn:hover {
+      background: #f0f0f0;
+      color: var(--azul-escuro);
+    }
+    
+    .member-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .member-item {
+      padding: 12px 16px;
+      margin: 8px 0;
+      background: var(--cinza);
+      border-radius: 12px;
+      border-left: 4px solid var(--verde-agua);
+      transition: all 0.2s;
+    }
+    
+    .member-item:hover {
+      background: #e8f5f1;
+      transform: translateX(4px);
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Organograma Tetra+ 2025</h1>
+    <div class="controls">
+      <button class="btn" onclick="expandAll()">Expandir Tudo</button>
+      <button class="btn" onclick="collapseAll()">Recolher Tudo</button>
+      <input type="text" class="search-box" placeholder="Buscar funcionário..." oninput="searchEmployee(this.value)">
+    </div>
+  </div>
+
+  <div class="chart-wrapper">
+    <div class="org-tree" id="orgTree"></div>
+  </div>
+
+  <div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <ul class="member-list" id="memberList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const estrutura = {
+      name: 'Claudia Paley',
+      cargo: 'CEO',
+      tipo: 'ceo',
+      children: [
+        {
+          name: 'Thiago Culhari',
+          cargo: 'Gerente',
+          tipo: 'gerente',
+          children: [
+            {
+              name: 'Ricardo Garcia',
+              cargo: 'Coordenador',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Danrley Silva', cargo: 'Analista', tipo: 'analista' },
+                { name: 'Diógenes Arruda', cargo: 'Analista', tipo: 'analista' }
+              ]
+            },
+            {
+              name: 'Isabela Vaz',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+            },
+            {
+              name: 'Danrley Silva',
+              cargo: 'Coordenador',
+              tipo: 'coordenador',
+            },
+            {
+              name: 'Diógenes Arruda',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador'
+            }
+          ]
+        },
+        {
+          name: 'Shilton Pereira',
+          cargo: 'Gerente',
+          tipo: 'gerente',
+          children: [
+            {
+              name: 'Luis Storti',
+              cargo: 'Coordenador',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Asa Branca', cargo: 'Projeto', tipo: 'projeto', membros: ['Jamille Ferreira Marques', 'Júlia Cardoso Rodrigues', 'Luis Fernando Storti', 'Rebeca Ferreira Sampaio', 'Roberval Ferreira das Chagas Filho', 'Shilton Pereira da Silva'] },
+              ]
+            },
+            {
+              name: 'Andressa Siqueira',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Asa Branca', cargo: 'Projeto', tipo: 'projeto', membros: ['Jamille Ferreira Marques', 'Júlia Cardoso Rodrigues', 'Luis Fernando Storti', 'Rebeca Ferreira Sampaio', 'Roberval Ferreira das Chagas Filho', 'Shilton Pereira da Silva'] },
+              ]
+            },
+            {
+              name: 'Lívia Dumaresq',
+              cargo: 'Analista',
+              tipo: 'analista',
+            },
+          ]
+        },
+        {
+          name: 'Alberto Figueiredo',
+          cargo: 'Gerente',
+          tipo: 'gerente',
+          children: [
+            {
+              name: 'Aloysio de Paola',
+              cargo: 'Coordenador',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Samarco', cargo: 'Projeto', tipo: 'projeto', membros: ['Alair dos Santos Silva', 'Alexandre Souza de Paula', 'Alice Carvalho de Oliveira', 'Caio César da Motta Pereira do Valle', 'Cal Kneip Puliti', 'Cévio Resende Mendonça', 'Claudio Bento Araujo Junior', 'Diego Raymundo Nascimento', 'Edésio Dantas Souza Sobrinho', 'Eduardo Patricio de Souza', 'Enyo Borgo Neves', 'Evandro Pianissola Machado', 'Francieli Pianzola Pereira de Aguiar', 'Gabriel Fernandes Mateus', 'Gabriel Guimarães Gomes', 'Iago Henrique Ferreira da Silva', 'Ian Fonseca de Andrade Vallim', 'Inaldo do Espirito Santo', 'Jéssica Mendes Ferreira', 'Juan Carlos Resende de Moraes', 'Julia Cavalcante Souza da Silva', 'Leonardo Suprani Silva', 'Lilian Prado Gomes da Rosa', 'Lucas de Oliveira Tiengo', 'Luiz André de Abreu', 'Pedro Henrique Mesquita Sutter de Assis', 'Raimundo Luiz Borges da Silva', 'Renan Gonçalves de Carvalho', 'Renato Franklin de Miranda', 'Rodrigo Inacio Gomes', 'Rodrigo Pereira SIlva', 'Thieres Daleprane Fiorotti', 'Welder Breno Oliveira'] }
+              ]
+            },
+            {
+              name: 'Gabriela Cassiano',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Nathalia Bottozzi', cargo: 'Analista', tipo: 'analista' },
+                { name: 'Ana Lia Quaggio', cargo: 'Analista', tipo: 'analista' },
+                { name: 'Projeto TR SP', cargo: 'Projeto', tipo: 'projeto', membros: ['Ana Lia Campos Quaggio', 'Beatriz Mattos do Prado Malafatti', 'Camila Aparecida Hipolito', 'Gessica Barbosa dos Santos', 'Mayara dos Santos Gonçalves Barros', 'Nathalia Mariano Bottozzi', 'Rodrigo Nobre Alves Barreto', 'Vanessa da Silva Ribeiro'] }
+              ]
+            },
+            {
+              name: 'Silvana Thodorof',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador'
+            }
+          ]
+        },
+        {
+          name: 'Ana Abreu',
+          cargo: 'Gerente',
+          tipo: 'gerente',
+          children: [
+            {
+              name: 'Guilherme Santos',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Statkraft', cargo: 'Projeto', tipo: 'projeto', membros: ['Luciano Vieira da Silva', 'Meyre Mar Damasceno de Almeida', 'Kissia Ferreira Pereira', 'Romario Dourado Gomes Seles', 'Felix Sousa Novais', 'Keylan Silva Santos', 'Janderson Silva Dourado', 'Edgar Hagemann Neto', 'Guilherme Ribeiro Martins dos Santos', 'Lorena dos Santos Matos'] }
+              ]
+            },
+            {
+              name: 'Kissia Pereira',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Statkraft', cargo: 'Projeto', tipo: 'projeto', membros: ['Luciano Vieira da Silva', 'Meyre Mar Damasceno de Almeida', 'Kissia Ferreira Pereira', 'Romario Dourado Gomes Seles', 'Felix Sousa Novais', 'Keylan Silva Santos', 'Janderson Silva Dourado', 'Edgar Hagemann Neto', 'Guilherme Ribeiro Martins dos Santos', 'Lorena dos Santos Matos'] }
+              ]
+            },
+            {
+              name: 'Projeto Alupar',
+              cargo: 'Projeto',
+              tipo: 'projeto',
+              membros: ['Danilo Ortega Benites', 'Mariana Azevedo Rabelo'] }
+          ]
+        },
+        {
+          name: 'Roberta Guagliardi',
+          cargo: 'Gerente',
+          tipo: 'gerente',
+          children: [
+            {
+              name: 'Equipe Petrobras',
+              cargo: 'Projeto',
+              tipo: 'projeto',
+              membros: ['Pâmella Sereno Guimarães', 'Roberta Emiliana Rocha Lasheras', 'Tatiane Barcelos Pinto']
+            },
+
+
+            {
+              name: 'Larissa Soares',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Atlas', cargo: 'Projeto', tipo: 'projeto', membros: ['Sayonara Monteiro Nunes'] }
+              ]
+            },
+            {
+              name: 'Alana Souza',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Atlas', cargo: 'Projeto', tipo: 'projeto', membros: ['Sayonara Monteiro Nunes'] }
+              ]
+            },
+            {
+              name: 'Fabricio Aguiar',
+              cargo: 'Coordenador',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Nesa', cargo: 'Projeto', tipo: 'projeto', membros: ['Ademir Guimarães de Sousa', 'Beatriz Souza da Silveira', 'Emerson Lima do Nascimento', 'Fabricio Frota Aguiar', 'Haroldo Oliveira e Silva Junior', 'Leidiane Costa Mota', 'Mônica Couto de Araújo', 'Sheilliane do Rosário Couto', 'Ulisses Ferreira Portela', 'Valeria Rodrigues Gonçalves'] }
+              ]
+            },
+            {
+              name: 'Beatriz Silveira',
+              cargo: 'Coordenadora',
+              tipo: 'coordenador',
+              children: [
+                { name: 'Projeto Nesa', cargo: 'Projeto', tipo: 'projeto', membros: ['Ademir Guimarães de Sousa', 'Beatriz Souza da Silveira', 'Emerson Lima do Nascimento', 'Fabricio Frota Aguiar', 'Haroldo Oliveira e Silva Junior', 'Leidiane Costa Mota', 'Mônica Couto de Araújo', 'Sheilliane do Rosário Couto', 'Ulisses Ferreira Portela', 'Valeria Rodrigues Gonçalves'] }
+              ]
+            },
+            {
+              name: 'Daiani de Mattos',
+              cargo: 'Analista',
+              tipo: 'analista',
+            },
+          ]
+        },
+        {
+          name: 'Alexandre Lessa',
+          cargo: 'Gerente',
+          tipo: 'gerente',
+          children: [
+            {
+              name: 'Rodrigo Alves',
+              cargo: 'Coordenador',
+              tipo: 'coordenador',
+            }
+          ]
+        }
+      ]
+    };
+
+    let activeGerente = null;
+    let activeCoordenador = null;
+
+    function getInitials(name) {
+      return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+
+    function renderCEO() {
+      const ceoCard = createCard(estrutura, null, 'ceo-card');
+      return `<div class="level-row">${ceoCard}</div>`;
+    }
+
+    function getPhoto(node) {
+      // Se quiser fotos específicas por nome:
+      const fotos = {
+        "Claudia Paley": "https://www.tetramais.com.br/organogramas/img/Claudia-Paley--.jpg",
+        "Thiago Culhari": "https://www.tetramais.com.br/organogramas/img/Thiago Culhari.png",
+        "Shilton Pereira": "https://www.tetramais.com.br/organogramas/img/Shilton Silva.png",
+        "Alberto Figueiredo": "https://www.tetramais.com.br/organogramas/img/Alberto-Cavalcanti.jpg",
+        "Ana Abreu": "https://www.tetramais.com.br/organogramas/img/Ana-Claudia-Abreu.jpg",
+        "Roberta Guagliardi": "https://www.tetramais.com.br/organogramas/img/Roberta-Guagliardi.jpg",
+        "Alexandre Lessa": "https://www.tetramais.com.br/organogramas/img/Alexandre-Lessa.jpg",
+        "Ricardo Garcia": "https://www.tetramais.com.br/organogramas/img/Ricardo_Antonio.jpg",
+        "Isabela Vaz": "https://www.tetramais.com.br/organogramas/img/Isabela-Vaz.jpg",
+        "Danrley Silva": "https://www.tetramais.com.br/organogramas/img/Danrley_Bosco.jpeg",
+        "Diógenes Arruda": "https://www.tetramais.com.br/organogramas/img/Diogenes_borges.jpg",
+        "Luis Storti": "https://www.tetramais.com.br/organogramas/img/Luis-Storti.png",
+        "Andressa Siqueira": "https://www.tetramais.com.br/organogramas/img/Andressa-Marques.jpg",
+        "Lívia Dumaresq": "https://www.tetramais.com.br/organogramas/img/Livia_Dumaresq.jpg",
+        "Aloysio de Paola": "https://www.tetramais.com.br/organogramas/img/Aloysio-de-Padua.jpg",
+        "Gabriela Cassiano": "https://www.tetramais.com.br/organogramas/img/Gabriela-Freire.jpg",
+        "Silvana Thodorof": "https://www.tetramais.com.br/organogramas/img/Silvana-Thodorof.jpg",
+        "Guilherme Santos": "https://www.tetramais.com.br/organogramas/img/guilherme_santos.jpg",
+        "Kissia Pereira": "https://www.tetramais.com.br/organogramas/img/Kissia_Ferreira.png",
+        "Equipe Petrobras": "https://www.tetramais.com.br/organogramas/img/petrobras.png",
+        "Larissa Soares": "https://www.tetramais.com.br/organogramas/img/larissa_soares.jpg",
+        "Alana Souza": "https://www.tetramais.com.br/organogramas/img/Alana-Souza.png",
+        "Fabricio Aguiar": "https://www.tetramais.com.br/organogramas/img/Fabricio_Aguiar.png",
+        "Beatriz Silveira": "https://www.tetramais.com.br/organogramas/img/beatriz_silveira.png",
+        "Daiani de Mattos": "https://www.tetramais.com.br/organogramas/img/Daiani_de_mattos.png",
+        "Rodrigo Alves": "https://www.tetramais.com.br/organogramas/img/rodrigo_alves.png",
+        "Ana Lia Quaggio": "https://www.tetramais.com.br/organogramas/img/analia_quaggio.png",
+        "Nathalia Bottozzi": "https://www.tetramais.com.br/organogramas/img/nathalia_botozzi.png",
+        "Projeto Statkraft": "https://www.tetramais.com.br/organogramas/img/statkraft.png",
+        "Projeto Samarco": "https://www.tetramais.com.br/organogramas/img/samarco.png",
+        "Projeto Nesa": "https://www.tetramais.com.br/organogramas/img/NESA.png",
+        "Projeto Atlas": "https://www.tetramais.com.br/organogramas/img/atlas.png",
+        "Projeto Asa Branca": "https://www.tetramais.com.br/organogramas/img/engie.png",
+        "Projeto Alupar": "https://www.tetramais.com.br/organogramas/img/pjt_alupar.png",
+        "Projeto TR SP": "https://www.tetramais.com.br/organogramas/img/edge.png",
+
+        // adicione todos os nomes necessários
+      };
+
+      // Se existir imagem específica:
+      if (fotos[node.name]) return fotos[node.name];
+
+      // Caso contrário, usa uma imagem genérica por tipo:
+      switch (node.tipo) {
+        case "ceo": return "imagens/ceo.jpg";
+        case "gerente": return "imagens/gerente.jpg";
+        case "coordenador": return "imagens/coordenador.jpg";
+        case "analista": return "imagens/analista.jpg";
+        case "projeto": return "imagens/equipe.jpg";
+        default: return "imagens/default.jpg";
+      }
+    }
+
+
+    function createCard(node, parentId, cardId) {
+      const hasChildren = node.children && node.children.length > 0;
+      const hasMembros = node.membros && node.membros.length > 0;
+      
+      let html = `<div class="card ${node.tipo}" id="${cardId}" data-name="${node.name.toLowerCase()}">
+        <div class="card-header">
+          <div class="photo">
+            <img src="${getPhoto(node)}" alt="${node.name}" />
+          </div>
+          <div class="card-info">
+            <h3 class="card-name">${node.name}</h3>
+            <p class="card-role">${node.cargo}</p>
+          </div>
+        </div>`;
+      
+      if (hasChildren && node.tipo === 'gerente') {
+        html += `<div class="expand-icon" onclick="toggleGerente('${cardId}')">+</div>`;
+      } else if (hasChildren && node.tipo === 'coordenador') {
+        html += `<div class="expand-icon" onclick="toggleCoordenador('${cardId}')">+</div>`;
+      } else if (hasMembros) {
+        html += `<div class="expand-icon" onclick="showMembers('${node.name}', ${JSON.stringify(node.membros).replace(/"/g, '&quot;')})">👥</div>`;
+      }
+      
+      html += `</div>`;
+      return html;
+    }
+
+    function renderGerentes() {
+      return estrutura.children.map((g, i) => createCard(g, 'ceo-card', `gerente-${i}`)).join('');
+    }
+
+    function toggleGerente(gerenteId) {
+      const coordRow = document.getElementById('coords-row');
+      const subRow = document.getElementById('sub-row');
+      const icon = document.querySelector(`#${gerenteId} .expand-icon`);
+      
+      if (activeGerente === gerenteId) {
+        coordRow.innerHTML = '';
+        coordRow.classList.add('hidden');
+        if (subRow) subRow.innerHTML = '';
+        if (subRow) subRow.classList.add('hidden');
+        icon.textContent = '+';
+        icon.classList.remove('expanded');
+        document.querySelector(`#${gerenteId}`).classList.remove('active');
+        activeGerente = null;
+        activeCoordenador = null;
+        return;
+      }
+      
+      document.querySelectorAll('.card.gerente').forEach(c => c.classList.remove('active'));
+      document.querySelector(`#${gerenteId}`).classList.add('active');
+      
+      const gerenteIndex = parseInt(gerenteId.split('-')[1]);
+      const gerente = estrutura.children[gerenteIndex];
+      
+      if (gerente.children) {
+        coordRow.innerHTML = gerente.children.map((c, i) => 
+          createCard(c, gerenteId, `coord-${gerenteIndex}-${i}`)
+        ).join('');
+        coordRow.classList.remove('hidden');
+        
+        if (subRow) {
+          subRow.innerHTML = '';
+          subRow.classList.add('hidden');
+        }
+      }
+      
+      document.querySelectorAll('.expand-icon').forEach(ic => {
+        if (ic.textContent === '+') ic.textContent = '+';
+        ic.classList.remove('expanded');
+      });
+      
+      icon.textContent = '−';
+      icon.classList.add('expanded');
+      activeGerente = gerenteId;
+      activeCoordenador = null;
+    }
+
+    function toggleCoordenador(coordId) {
+      const subRow = document.getElementById('sub-row');
+      const icon = document.querySelector(`#${coordId} .expand-icon`);
+      
+      if (activeCoordenador === coordId) {
+        subRow.innerHTML = '';
+        subRow.classList.add('hidden');
+        icon.textContent = '+';
+        icon.classList.remove('expanded');
+        document.querySelector(`#${coordId}`).classList.remove('active');
+        activeCoordenador = null;
+        return;
+      }
+      
+      document.querySelectorAll('.card.coordenador').forEach(c => c.classList.remove('active'));
+      document.querySelector(`#${coordId}`).classList.add('active');
+      
+      const parts = coordId.split('-');
+      const gerenteIndex = parseInt(parts[1]);
+      const coordIndex = parseInt(parts[2]);
+      
+      const gerente = estrutura.children[gerenteIndex];
+      const coord = gerente.children[coordIndex];
+      
+      if (coord.children) {
+        subRow.innerHTML = coord.children.map((sub, i) => 
+          createCard(sub, coordId, `sub-${gerenteIndex}-${coordIndex}-${i}`)
+        ).join('');
+        subRow.classList.remove('hidden');
+      }
+      
+      document.querySelectorAll('.card.coordenador .expand-icon').forEach(ic => {
+        ic.textContent = '+';
+        ic.classList.remove('expanded');
+      });
+      
+      icon.textContent = '−';
+      icon.classList.add('expanded');
+      activeCoordenador = coordId;
+    }
+
+    function showMembers(title, members) {
+      document.getElementById('modalTitle').textContent = title;
+      const list = document.getElementById('memberList');
+      list.innerHTML = members.map(m => `<li class="member-item">${m}</li>`).join('');
+      document.getElementById('modal').classList.add('active');
+    }
+
+    function closeModal(event) {
+      if (!event || event.target.id === 'modal') {
+        document.getElementById('modal').classList.remove('active');
+      }
+    }
+
+    function expandAll() {
+      estrutura.children.forEach((g, i) => {
+        if (g.children && g.children.length > 0) {
+          toggleGerente(`gerente-${i}`);
+        }
+      });
+    }
+
+    function collapseAll() {
+      const coordRow = document.getElementById('coords-row');
+      const subRow = document.getElementById('sub-row');
+      coordRow.innerHTML = '';
+      coordRow.classList.add('hidden');
+      subRow.innerHTML = '';
+      subRow.classList.add('hidden');
+      
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.expand-icon').forEach(ic => {
+        if (ic.textContent !== '👥') {
+          ic.textContent = '+';
+          ic.classList.remove('expanded');
+        }
+      });
+      
+      activeGerente = null;
+      activeCoordenador = null;
+    }
+
+    function searchEmployee(query) {
+      const allCards = document.querySelectorAll('.card');
+      query = query.toLowerCase().trim();
+      
+      if (!query) {
+        allCards.forEach(c => c.classList.remove('hidden'));
+        return;
+      }
+      
+      allCards.forEach(c => {
+        const name = c.getAttribute('data-name');
+        if (name && name.includes(query)) {
+          c.classList.remove('hidden');
+        } else {
+          c.classList.add('hidden');
+        }
+      });
+    }
+
+    function init() {
+      const tree = document.getElementById('orgTree');
+      tree.innerHTML = `
+        ${renderCEO()}
+        <div class="connector"></div>
+        <div class="level-row" id="gerentes-row">${renderGerentes()}</div>
+        <div class="connector hidden" id="conn-coord"></div>
+        <div class="level-row hidden" id="coords-row"></div>
+        <div class="connector hidden" id="conn-sub"></div>
+        <div class="level-row hidden" id="sub-row"></div>
+      `;
+    }
+
+    init();
+  </script>
+</body>
+</html>
