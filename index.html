@@ -1,809 +1,773 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Organograma Tetra+ 2025</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia Interativo de Licenciamento por Órgão (LP, LI e LO)</title>
   <style>
     :root {
-      --azul-escuro: #242c5a;
-      --azul-claro: #46a2da;
-      --azul-agua: #30D5C8;
-      --verde-agua: #6fc09e;
-      --cinza: #f4f6fa;
-      --texto: #1a1a1a;
-      --laranja: #ff9052;
+      --bg: #eef4fa;
+      --surface: #ffffff;
+      --text: #122030;
+      --muted: #47586b;
+      --primary: #003b70;
+      --secondary: #0ea5be;
+      --ok: #2da96d;
+      --warn: #e0a33a;
+      --danger: #d94f4f;
+      --line: #cad8e7;
+      --focus: #2563eb;
+      --radius: 14px;
+      --shadow: 0 10px 26px rgba(0, 38, 77, .1);
     }
-    
+
     * { box-sizing: border-box; }
-    
-    html, body {
+
+    body {
       margin: 0;
-      padding: 0;
-      background: var(--cinza);
-      color: var(--texto);
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      height: 100%;
-      overflow: auto;
+      color: var(--text);
+      background: linear-gradient(#f8fcff, #edf3f9);
     }
-    
-    .header {
-      background: linear-gradient(135deg, var(--azul-escuro) 0%, var(--azul-claro) 100%);
-      color: white;
-      padding: 24px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    .header h1 {
-      margin: 0 0 8px 0;
-      font-size: 28px;
-      text-align: center;
-    }
-    
-    .header .controls {
-      max-width: 1400px;
-      margin: 12px auto 0;
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    
-    .btn {
-      background: white;
-      color: var(--azul-escuro);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    
-    .search-box {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      width: 250px;
-    }
-    
-    .chart-wrapper {
-      max-width: 1600px;
+
+    .container {
+      width: min(1260px, 95vw);
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 24px 0 42px;
     }
-    
-    .org-tree {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
+
+    .hero {
+      background: linear-gradient(145deg, #003b70, #0b5f97);
+      color: #fff;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
     }
-    
-    .level-row {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      width: 100%;
-      animation: fadeIn 0.4s ease;
-    }
-    
+
+    .hero h1 { margin: 0; font-size: clamp(1.25rem, 2.3vw, 2rem); }
+    .hero p { margin: 10px 0 0; color: #d4e8f8; line-height: 1.5; }
+
     .card {
-      background: white;
-      border: 3px solid var(--azul-claro);
-      border-radius: 16px;
-      padding: 16px 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .grid { display: grid; gap: 14px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+    .license-card {
+      border-left: 6px solid transparent;
       cursor: pointer;
-      transition: all 0.3s ease;
-      min-width: 200px;
-      max-width: 280px;
-      position: relative;
+      transition: .2s ease;
     }
-    
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
-      border-color: var(--azul-escuro);
+
+    .license-card.active,
+    .license-card:hover {
+      transform: translateY(-2px);
+      border-left-color: var(--secondary);
     }
-    
-    .card.active {
-      border-color: var(--azul-escuro);
-      box-shadow: 0 0 0 4px rgba(36, 44, 90, 0.1);
+
+    .license-card h2 { margin: 0; font-size: 1.08rem; color: var(--primary); }
+    .license-card p { margin: 7px 0 0; color: var(--muted); }
+
+    .wizard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
     }
-    
-    .card.ceo {
-      border-color: var(--azul-escuro);
-      background: linear-gradient(135deg, #fff 0%, #e8f2f7 100%);
-      border-width: 4px;
+
+    .wizard-step {
+      border: 1px dashed #9bb8d5;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #244764;
+      background: #f5fbff;
+      font-size: .9rem;
+      font-weight: 700;
     }
-    
-    .card.gerente {
-      border-color: var(--azul-claro);
-    }
-    
-    .card.coordenador {
-      border-color: var(--verde-agua);
-    }
-    
-    .card.projeto {
-      border-color: var(--laranja);
-      background: #fff9f5;
-    }
-    
-    .card-header {
-      display: flex;
-      align-items: center;
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
     }
-    
-    .photo {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 3px solid var(--azul-claro);
-      overflow: hidden;
-      flex-shrink: 0;
+
+    .control label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--muted);
     }
 
-    .photo img {
+    select, input, button {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      border: 1px solid #bccfe2;
+      border-radius: 10px;
+      background: #fff;
+      font-size: .96rem;
+      padding: 10px 12px;
+      color: var(--text);
     }
 
-    
-    .card-info {
-      flex: 1;
+    button { cursor: pointer; font-weight: 700; }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
     }
-    
-    .card-name {
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    select:focus-visible,
+    input:focus-visible,
+    button:focus-visible,
+    .license-card:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .scope {
+      margin-top: 8px;
+      font-size: .9rem;
+      color: #28537a;
+      background: #f0f8ff;
+      border: 1px solid #bed3e8;
+      border-radius: 10px;
+      padding: 9px 10px;
+    }
+
+    .main {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin: 10px 0 6px;
+    }
+
+    .summary-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #f8fbff;
+    }
+
+    .summary-item span {
+      display: block;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
       font-weight: 700;
-      font-size: 16px;
-      margin: 0 0 4px 0;
-      color: var(--azul-escuro);
     }
-    
-    .card-role {
-      font-size: 13px;
-      color: #666;
-      margin: 0;
-    }
-    
-    .expand-icon {
-      position: absolute;
-      bottom: -16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--azul-claro);
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
+
+    .summary-item strong { font-size: .95rem; }
+
+    .status {
+      display: inline-block;
+      color: #fff;
+      font-size: .8rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      z-index: 10;
+      border-radius: 999px;
+      padding: 6px 10px;
+      margin: 0 6px 6px 0;
     }
-    
-    .expand-icon:hover {
-      background: var(--azul-escuro);
-      transform: translateX(-50%) scale(1.1);
+
+    .ok { background: var(--ok); }
+    .warn { background: var(--warn); }
+    .danger { background: var(--danger); }
+    .info { background: var(--secondary); }
+
+    .progress-wrap {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fcfeff;
     }
-    
-    .expand-icon.expanded {
-      background: var(--verde-agua);
-    }
-    
-    .connector {
-      width: 3px;
-      height: 30px;
-      background: var(--verde-agua);
-      margin: 0 auto;
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .modal.active {
-      display: flex;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .modal-content {
-      background: white;
-      border-radius: 20px;
-      padding: 32px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      animation: slideUp 0.4s ease;
-    }
-    
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 3px solid var(--verde-agua);
-    }
-    
-    .modal-title {
-      font-size: 22px;
+
+    .progress-label {
+      font-size: .86rem;
+      color: var(--muted);
+      margin-bottom: 8px;
       font-weight: 700;
-      color: var(--azul-escuro);
-      margin: 0;
     }
-    
-    .close-btn {
-      background: none;
-      border: none;
-      font-size: 28px;
-      color: #999;
-      cursor: pointer;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: all 0.2s;
+
+    .progress {
+      height: 12px;
+      width: 100%;
+      border-radius: 999px;
+      background: #e5edf6;
+      overflow: hidden;
     }
-    
-    .close-btn:hover {
-      background: #f0f0f0;
-      color: var(--azul-escuro);
+
+    .progress > div {
+      height: 100%;
+      background: linear-gradient(90deg, #1cb5c9, #2e90c3);
+      width: 0;
+      transition: width .2s;
     }
-    
-    .member-list {
-      list-style: none;
+
+    .timeline {
+      margin: 12px 0 0;
       padding: 0;
-      margin: 0;
+      list-style: none;
     }
-    
-    .member-item {
-      padding: 12px 16px;
-      margin: 8px 0;
-      background: var(--cinza);
+
+    .timeline li {
+      position: relative;
+      margin-bottom: 12px;
+      padding-left: 22px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .timeline li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--secondary);
+      position: absolute;
+      left: 0;
+      top: 4px;
+    }
+
+    .timeline strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+    .next-actions { margin: 0; padding-left: 20px; }
+    .next-actions li { margin-bottom: 6px; line-height: 1.45; }
+
+    .tag-group { margin-top: 10px; }
+    .tag-group h4 { margin: 0 0 8px; color: var(--primary); }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag {
+      font-size: .82rem;
+      font-weight: 700;
+      border: 1px solid #bdd1e6;
+      border-radius: 999px;
+      background: #f0f8ff;
+      color: #215581;
+      padding: 6px 10px;
+    }
+
+    .org-box {
+      margin-top: 12px;
+      border: 1px solid var(--line);
       border-radius: 12px;
-      border-left: 4px solid var(--verde-agua);
-      transition: all 0.2s;
+      background: #f8fbff;
+      padding: 12px;
     }
-    
-    .member-item:hover {
-      background: #e8f5f1;
-      transform: translateX(4px);
+
+    .org-box h4 { margin: 0 0 8px; color: var(--primary); }
+
+    .accordion details {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      margin-bottom: 8px;
     }
-    
-    .hidden {
-      display: none !important;
+
+    .accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 11px 13px;
+      background: #f5fbff;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .accordion summary::-webkit-details-marker { display: none; }
+    .accordion .content { padding: 12px 13px; color: var(--muted); line-height: 1.45; }
+
+    @media (max-width: 980px) {
+      .main { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Organograma Tetra+ 2025</h1>
-    <div class="controls">
-      <button class="btn" onclick="expandAll()">Expandir Tudo</button>
-      <button class="btn" onclick="collapseAll()">Recolher Tudo</button>
-      <input type="text" class="search-box" placeholder="Buscar funcionário..." oninput="searchEmployee(this.value)">
-    </div>
-  </div>
+  <div class="container">
+    <section class="hero">
+      <h1>Painel de Procedimentos por Órgão Ambiental (LP, LI, LO)</h1>
+      <p>
+        Escolha o tipo de licença, o órgão e a situação atual para receber uma orientação prática:
+        próximos passos, documentos obrigatórios, riscos e fluxo resumido de execução.
+      </p>
+    </section>
 
-  <div class="chart-wrapper">
-    <div class="org-tree" id="orgTree"></div>
-  </div>
+    <section class="grid grid-3" id="licenseCards"></section>
 
-  <div class="modal" id="modal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h2 class="modal-title" id="modalTitle"></h2>
-        <button class="close-btn" onclick="closeModal()">&times;</button>
+    <section class="card">
+      <div class="wizard">
+        <div class="wizard-step">1) Selecione LP, LI ou LO</div>
+        <div class="wizard-step">2) Escolha o órgão ambiental</div>
+        <div class="wizard-step">3) Informe situação e gere o plano</div>
       </div>
-      <ul class="member-list" id="memberList"></ul>
-    </div>
+
+      <div class="controls">
+        <div class="control">
+          <label for="licenseType">Tipo de licença</label>
+          <select id="licenseType"></select>
+        </div>
+
+        <div class="control">
+          <label for="agency">Órgão ambiental</label>
+          <select id="agency"></select>
+          <div class="scope" id="agencyScope"></div>
+        </div>
+
+        <div class="control">
+          <label for="docStatus">Situação da documentação</label>
+          <select id="docStatus">
+            <option value="completa">Completa</option>
+            <option value="pendencias">Com pendências / exigências</option>
+            <option value="inicial">Preparação inicial</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="agencyDecision">Situação da análise</label>
+          <select id="agencyDecision">
+            <option value="analise">Em análise</option>
+            <option value="deferido">Deferido</option>
+            <option value="indeferido">Indeferido</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="search">Busca por etapa/termo</label>
+          <input id="search" placeholder="Ex.: EIA, vistoria, supressão" />
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+        <button class="btn-primary" id="simulateBtn">Gerar plano do cenário</button>
+        <button class="btn-secondary" id="resetBtn">Limpar filtros</button>
+      </div>
+    </section>
+
+    <section class="main">
+      <article class="card">
+        <h2 id="panelTitle" style="margin:0; color:var(--primary);"></h2>
+        <p id="panelDescription" style="color:var(--muted);"></p>
+
+        <div id="statusLine" style="margin-top:8px;"></div>
+
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span>Próximo passo prioritário</span>
+            <strong id="summaryNextStep"></strong>
+          </div>
+          <div class="summary-item">
+            <span>Prazos internos sugeridos</span>
+            <strong id="summaryDeadline"></strong>
+          </div>
+          <div class="summary-item">
+            <span>Nível de risco atual</span>
+            <strong id="summaryRisk"></strong>
+          </div>
+          <div class="summary-item">
+            <span>Responsável recomendado</span>
+            <strong id="summaryOwner"></strong>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label" id="progressLabel"></div>
+          <div class="progress"><div id="progressBar"></div></div>
+        </div>
+
+        <div class="org-box">
+          <h4 id="orgTitle"></h4>
+          <div id="orgProcedure" style="color:var(--muted); line-height:1.45;"></div>
+        </div>
+
+        <h3 style="margin:14px 0 8px; color:var(--primary);">Fluxo resumido</h3>
+        <ul class="timeline" id="timeline"></ul>
+
+        <h3 style="margin:12px 0 8px; color:var(--primary);">Próximas ações para o gestor</h3>
+        <ul class="next-actions" id="actions"></ul>
+      </article>
+
+      <aside class="card">
+        <div class="tag-group">
+          <h4>Documentos obrigatórios</h4>
+          <div class="tag-list" id="requiredDocs"></div>
+        </div>
+
+        <div class="tag-group">
+          <h4>Documentos recomendados</h4>
+          <div class="tag-list" id="recommendedDocs"></div>
+        </div>
+
+        <h3 style="margin:16px 0 8px; color:var(--primary);">Pontos por órgão</h3>
+        <div class="accordion" id="orgSpecifics"></div>
+      </aside>
+    </section>
   </div>
 
   <script>
-    const estrutura = {
-      name: 'Claudia Paley',
-      cargo: 'CEO',
-      tipo: 'ceo',
-      children: [
-        {
-          name: 'Thiago Culhari',
-          cargo: 'Gerente',
-          tipo: 'gerente',
-          children: [
-            {
-              name: 'Ricardo Garcia',
-              cargo: 'Coordenador',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Danrley Silva', cargo: 'Analista', tipo: 'analista' },
-                { name: 'Diógenes Arruda', cargo: 'Analista', tipo: 'analista' }
-              ]
-            },
-            {
-              name: 'Isabela Vaz',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-            },
-            {
-              name: 'Danrley Silva',
-              cargo: 'Coordenador',
-              tipo: 'coordenador',
-            },
-            {
-              name: 'Diógenes Arruda',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador'
-            }
-          ]
-        },
-        {
-          name: 'Shilton Pereira',
-          cargo: 'Gerente',
-          tipo: 'gerente',
-          children: [
-            {
-              name: 'Luis Storti',
-              cargo: 'Coordenador',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Asa Branca', cargo: 'Projeto', tipo: 'projeto', membros: ['Jamille Ferreira Marques', 'Júlia Cardoso Rodrigues', 'Luis Fernando Storti', 'Rebeca Ferreira Sampaio', 'Roberval Ferreira das Chagas Filho', 'Shilton Pereira da Silva'] },
-              ]
-            },
-            {
-              name: 'Andressa Siqueira',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Asa Branca', cargo: 'Projeto', tipo: 'projeto', membros: ['Jamille Ferreira Marques', 'Júlia Cardoso Rodrigues', 'Luis Fernando Storti', 'Rebeca Ferreira Sampaio', 'Roberval Ferreira das Chagas Filho', 'Shilton Pereira da Silva'] },
-              ]
-            },
-            {
-              name: 'Lívia Dumaresq',
-              cargo: 'Analista',
-              tipo: 'analista',
-            },
-          ]
-        },
-        {
-          name: 'Alberto Figueiredo',
-          cargo: 'Gerente',
-          tipo: 'gerente',
-          children: [
-            {
-              name: 'Aloysio de Paola',
-              cargo: 'Coordenador',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Samarco', cargo: 'Projeto', tipo: 'projeto', membros: ['Alair dos Santos Silva', 'Alexandre Souza de Paula', 'Alice Carvalho de Oliveira', 'Caio César da Motta Pereira do Valle', 'Cal Kneip Puliti', 'Cévio Resende Mendonça', 'Claudio Bento Araujo Junior', 'Diego Raymundo Nascimento', 'Edésio Dantas Souza Sobrinho', 'Eduardo Patricio de Souza', 'Enyo Borgo Neves', 'Evandro Pianissola Machado', 'Francieli Pianzola Pereira de Aguiar', 'Gabriel Fernandes Mateus', 'Gabriel Guimarães Gomes', 'Iago Henrique Ferreira da Silva', 'Ian Fonseca de Andrade Vallim', 'Inaldo do Espirito Santo', 'Jéssica Mendes Ferreira', 'Juan Carlos Resende de Moraes', 'Julia Cavalcante Souza da Silva', 'Leonardo Suprani Silva', 'Lilian Prado Gomes da Rosa', 'Lucas de Oliveira Tiengo', 'Luiz André de Abreu', 'Pedro Henrique Mesquita Sutter de Assis', 'Raimundo Luiz Borges da Silva', 'Renan Gonçalves de Carvalho', 'Renato Franklin de Miranda', 'Rodrigo Inacio Gomes', 'Rodrigo Pereira SIlva', 'Thieres Daleprane Fiorotti', 'Welder Breno Oliveira'] }
-              ]
-            },
-            {
-              name: 'Gabriela Cassiano',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Nathalia Bottozzi', cargo: 'Analista', tipo: 'analista' },
-                { name: 'Ana Lia Quaggio', cargo: 'Analista', tipo: 'analista' },
-                { name: 'Projeto TR SP', cargo: 'Projeto', tipo: 'projeto', membros: ['Ana Lia Campos Quaggio', 'Beatriz Mattos do Prado Malafatti', 'Camila Aparecida Hipolito', 'Gessica Barbosa dos Santos', 'Mayara dos Santos Gonçalves Barros', 'Nathalia Mariano Bottozzi', 'Rodrigo Nobre Alves Barreto', 'Vanessa da Silva Ribeiro'] }
-              ]
-            },
-            {
-              name: 'Silvana Thodorof',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador'
-            }
-          ]
-        },
-        {
-          name: 'Ana Abreu',
-          cargo: 'Gerente',
-          tipo: 'gerente',
-          children: [
-            {
-              name: 'Guilherme Santos',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Statkraft', cargo: 'Projeto', tipo: 'projeto', membros: ['Luciano Vieira da Silva', 'Meyre Mar Damasceno de Almeida', 'Kissia Ferreira Pereira', 'Romario Dourado Gomes Seles', 'Felix Sousa Novais', 'Keylan Silva Santos', 'Janderson Silva Dourado', 'Edgar Hagemann Neto', 'Guilherme Ribeiro Martins dos Santos', 'Lorena dos Santos Matos'] }
-              ]
-            },
-            {
-              name: 'Kissia Pereira',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Statkraft', cargo: 'Projeto', tipo: 'projeto', membros: ['Luciano Vieira da Silva', 'Meyre Mar Damasceno de Almeida', 'Kissia Ferreira Pereira', 'Romario Dourado Gomes Seles', 'Felix Sousa Novais', 'Keylan Silva Santos', 'Janderson Silva Dourado', 'Edgar Hagemann Neto', 'Guilherme Ribeiro Martins dos Santos', 'Lorena dos Santos Matos'] }
-              ]
-            },
-            {
-              name: 'Projeto Alupar',
-              cargo: 'Projeto',
-              tipo: 'projeto',
-              membros: ['Danilo Ortega Benites', 'Mariana Azevedo Rabelo'] }
-          ]
-        },
-        {
-          name: 'Roberta Guagliardi',
-          cargo: 'Gerente',
-          tipo: 'gerente',
-          children: [
-            {
-              name: 'Equipe Petrobras',
-              cargo: 'Projeto',
-              tipo: 'projeto',
-              membros: ['Pâmella Sereno Guimarães', 'Roberta Emiliana Rocha Lasheras', 'Tatiane Barcelos Pinto']
-            },
-
-
-            {
-              name: 'Larissa Soares',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Atlas', cargo: 'Projeto', tipo: 'projeto', membros: ['Sayonara Monteiro Nunes'] }
-              ]
-            },
-            {
-              name: 'Alana Souza',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Atlas', cargo: 'Projeto', tipo: 'projeto', membros: ['Sayonara Monteiro Nunes'] }
-              ]
-            },
-            {
-              name: 'Fabricio Aguiar',
-              cargo: 'Coordenador',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Nesa', cargo: 'Projeto', tipo: 'projeto', membros: ['Ademir Guimarães de Sousa', 'Beatriz Souza da Silveira', 'Emerson Lima do Nascimento', 'Fabricio Frota Aguiar', 'Haroldo Oliveira e Silva Junior', 'Leidiane Costa Mota', 'Mônica Couto de Araújo', 'Sheilliane do Rosário Couto', 'Ulisses Ferreira Portela', 'Valeria Rodrigues Gonçalves'] }
-              ]
-            },
-            {
-              name: 'Beatriz Silveira',
-              cargo: 'Coordenadora',
-              tipo: 'coordenador',
-              children: [
-                { name: 'Projeto Nesa', cargo: 'Projeto', tipo: 'projeto', membros: ['Ademir Guimarães de Sousa', 'Beatriz Souza da Silveira', 'Emerson Lima do Nascimento', 'Fabricio Frota Aguiar', 'Haroldo Oliveira e Silva Junior', 'Leidiane Costa Mota', 'Mônica Couto de Araújo', 'Sheilliane do Rosário Couto', 'Ulisses Ferreira Portela', 'Valeria Rodrigues Gonçalves'] }
-              ]
-            },
-            {
-              name: 'Daiani de Mattos',
-              cargo: 'Analista',
-              tipo: 'analista',
-            },
-          ]
-        },
-        {
-          name: 'Alexandre Lessa',
-          cargo: 'Gerente',
-          tipo: 'gerente',
-          children: [
-            {
-              name: 'Rodrigo Alves',
-              cargo: 'Coordenador',
-              tipo: 'coordenador',
-            }
-          ]
+    const LICENSES = {
+      LP: {
+        title: "LP — Licença Prévia",
+        purpose: "Avalia viabilidade ambiental e define condicionantes iniciais.",
+        timeline: [
+          ["Protocolo", "Formalizar requerimento e registrar processo no órgão competente."],
+          ["Triagem", "Órgão valida documentos técnicos mínimos e enquadramento."],
+          ["Análise técnica", "Parecer sobre impactos, alternativas e medidas de controle."],
+          ["Exigências", "Complementar estudos e responder notificações no prazo."],
+          ["Conclusão", "Deferimento/indeferimento, taxa e publicação legal."]
+        ],
+        docs: {
+          required: ["Requerimento", "Estudo ambiental", "ART/RRT", "Mapa e memorial", "Comprovante de taxa"],
+          recommended: ["Matriz de condicionantes preliminar", "Plano de resposta a exigências", "Cronograma macro"]
         }
-      ]
+      },
+      LI: {
+        title: "LI — Licença de Instalação",
+        purpose: "Autoriza implantação e execução de programas ambientais.",
+        timeline: [
+          ["Requerimento LI", "Protocolar plano de obras e programas ambientais."],
+          ["Validação técnica", "Conferência de PBA/PCA e autorizações associadas."],
+          ["Diligências", "Atendimento de exigências e ajustes de projeto."],
+          ["Publicação", "Após deferimento, recolher taxa e publicar atos legais."],
+          ["Emissão LI", "Implantação com monitoramento de condicionantes."]
+        ],
+        docs: {
+          required: ["PBA/PCA", "Cronograma de implantação", "Plano de monitoramento", "Autorizações complementares", "Relatório de atendimento"],
+          recommended: ["Plano de gestão de risco de obra", "Checklist de evidências de campo", "Plano de comunicação com órgão"]
+        }
+      },
+      LO: {
+        title: "LO — Licença de Operação",
+        purpose: "Autoriza operação com base no cumprimento da LI e desempenho ambiental.",
+        timeline: [
+          ["Solicitação LO", "Protocolar relatório de cumprimento das condicionantes da LI."],
+          ["Checagem", "Conferir indicadores, monitoramentos e compensações."],
+          ["Vistoria", "Órgão pode vistoriar e solicitar ajustes finais."],
+          ["Ato final", "Deferimento, taxa e publicação oficial."],
+          ["Pós-emissão", "Operação com controle periódico e planejamento da renovação."]
+        ],
+        docs: {
+          required: ["Relatório consolidado LI", "Laudos de monitoramento", "Comprovação de compensação", "Taxa da licença", "Publicações legais"],
+          recommended: ["Painel de renovação", "Plano de auditorias", "Matriz de não conformidades"]
+        }
+      }
     };
 
-    let activeGerente = null;
-    let activeCoordenador = null;
+    const ORGAOS = {
+      IBAMA: {
+        scope: "Impacto nacional/interestadual, mar territorial ou terras federais.",
+        LP: "Geralmente exige TR formal e estudos robustos; pode ocorrer audiência pública.",
+        LI: "Foco em programas executivos, autorizações federais associadas e rastreabilidade das evidências.",
+        LO: "Comprovação consolidada de condicionantes e efetividade dos programas ambientais.",
+        points: [
+          ["Comunicações oficiais", "Responder via sistema federal dentro dos prazos de ofício."],
+          ["Evidências", "Manter matriz de condicionantes com anexos e responsáveis."],
+          ["Risco recorrente", "Atraso em complementações técnicas amplia prazo de análise."]
+        ]
+      },
+      CETESB: {
+        scope: "Licenciamento estadual no estado de São Paulo.",
+        LP: "Análise por agência/diretoria técnica com atenção ao enquadramento da tipologia.",
+        LI: "Ênfase em controle de obra, resíduos, efluentes e autorizações vinculadas.",
+        LO: "Checagem de desempenho operacional e conformidade para operação regular.",
+        points: [
+          ["Taxas/publicações", "Conferir prazos de pagamento e publicação do rito estadual."],
+          ["Padronização", "Anexos padronizados evitam exigências de forma."],
+          ["Risco recorrente", "Inconsistência documental aumenta retrabalho."]
+        ]
+      },
+      INEA: {
+        scope: "Licenciamento estadual no estado do Rio de Janeiro.",
+        LP: "Pode exigir documentação locacional e programas preliminares de mitigação.",
+        LI: "Verifica coerência entre projeto, condicionantes e monitoramentos de implantação.",
+        LO: "Requer comprovação detalhada de execução de condicionantes e desempenho.",
+        points: [
+          ["Controle de prazos", "Gerenciar vencimentos de exigências para evitar paralisação."],
+          ["Qualidade técnica", "Relatórios objetivos e georreferenciados aceleram análise."],
+          ["Risco recorrente", "Pendências da LI atrasam deferimento da LO."]
+        ]
+      },
+      IEMA: {
+        scope: "Licenciamento estadual no estado do Espírito Santo.",
+        LP: "Ênfase na consistência entre estudo ambiental e condicionantes iniciais.",
+        LI: "Avalia execução dos programas e controles ambientais da fase de obra.",
+        LO: "Exige relatório consolidado de condicionantes e resultados de desempenho.",
+        points: [
+          ["Gestão interna", "Cronograma único por fase (LP, LI, LO)."],
+          ["Protocolos", "Conferir anexos obrigatórios antes do envio."],
+          ["Risco recorrente", "Falha de evidência de campo gera nova diligência."]
+        ]
+      },
+      SEMAD: {
+        scope: "Licenciamento estadual em Minas Gerais e regionais.",
+        LP: "Análise de viabilidade com foco em estudos e condicionantes por porte/tipologia.",
+        LI: "Aderência dos planos executivos e atendimento das condicionantes da LP.",
+        LO: "Efetividade dos programas implantados e condicionantes periódicas de operação.",
+        points: [
+          ["Governança", "Definir dono por condicionante e reporte mensal."],
+          ["Auditoria", "Validar evidências internamente antes do protocolo."],
+          ["Risco recorrente", "Perda de prazo de ofício pode levar a indeferimento/arquivamento."]
+        ]
+      }
+    };
 
-    function getInitials(name) {
-      return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    const statusMap = {
+      completa: ["Documentação completa", "ok"],
+      pendencias: ["Pendências em aberto", "warn"],
+      inicial: ["Preparação inicial", "info"],
+      analise: ["Órgão em análise", "info"],
+      deferido: ["Processo deferido", "ok"],
+      indeferido: ["Processo indeferido", "danger"]
+    };
+
+    const initialState = {
+      license: "LP",
+      agency: "IBAMA",
+      docStatus: "completa",
+      decision: "analise",
+      search: ""
+    };
+
+    const state = { ...initialState };
+
+    function getRiskAndStep() {
+      if (state.decision === "indeferido") return { risk: "Alto", step: 2 };
+      if (state.docStatus === "pendencias") return { risk: "Médio", step: 3 };
+      if (state.decision === "deferido") return { risk: "Baixo", step: 5 };
+      if (state.docStatus === "inicial") return { risk: "Médio", step: 1 };
+      return { risk: "Baixo", step: 4 };
     }
 
-    function renderCEO() {
-      const ceoCard = createCard(estrutura, null, 'ceo-card');
-      return `<div class="level-row">${ceoCard}</div>`;
-    }
+    function getSummary() {
+      if (state.decision === "indeferido") {
+        return {
+          nextStep: "Preparar recurso técnico",
+          deadline: "até 5 dias úteis para rascunho interno",
+          owner: "Coordenação de Licenciamento"
+        };
+      }
 
-    function getPhoto(node) {
-      // Se quiser fotos específicas por nome:
-      const fotos = {
-        "Claudia Paley": "https://www.tetramais.com.br/organogramas/img/Claudia-Paley--.jpg",
-        "Thiago Culhari": "https://www.tetramais.com.br/organogramas/img/Thiago Culhari.png",
-        "Shilton Pereira": "https://www.tetramais.com.br/organogramas/img/Shilton Silva.png",
-        "Alberto Figueiredo": "https://www.tetramais.com.br/organogramas/img/Alberto-Cavalcanti.jpg",
-        "Ana Abreu": "https://www.tetramais.com.br/organogramas/img/Ana-Claudia-Abreu.jpg",
-        "Roberta Guagliardi": "https://www.tetramais.com.br/organogramas/img/Roberta-Guagliardi.jpg",
-        "Alexandre Lessa": "https://www.tetramais.com.br/organogramas/img/Alexandre-Lessa.jpg",
-        "Ricardo Garcia": "https://www.tetramais.com.br/organogramas/img/Ricardo_Antonio.jpg",
-        "Isabela Vaz": "https://www.tetramais.com.br/organogramas/img/Isabela-Vaz.jpg",
-        "Danrley Silva": "https://www.tetramais.com.br/organogramas/img/Danrley_Bosco.jpeg",
-        "Diógenes Arruda": "https://www.tetramais.com.br/organogramas/img/Diogenes_borges.jpg",
-        "Luis Storti": "https://www.tetramais.com.br/organogramas/img/Luis-Storti.png",
-        "Andressa Siqueira": "https://www.tetramais.com.br/organogramas/img/Andressa-Marques.jpg",
-        "Lívia Dumaresq": "https://www.tetramais.com.br/organogramas/img/Livia_Dumaresq.jpg",
-        "Aloysio de Paola": "https://www.tetramais.com.br/organogramas/img/Aloysio-de-Padua.jpg",
-        "Gabriela Cassiano": "https://www.tetramais.com.br/organogramas/img/Gabriela-Freire.jpg",
-        "Silvana Thodorof": "https://www.tetramais.com.br/organogramas/img/Silvana-Thodorof.jpg",
-        "Guilherme Santos": "https://www.tetramais.com.br/organogramas/img/guilherme_santos.jpg",
-        "Kissia Pereira": "https://www.tetramais.com.br/organogramas/img/Kissia_Ferreira.png",
-        "Equipe Petrobras": "https://www.tetramais.com.br/organogramas/img/petrobras.png",
-        "Larissa Soares": "https://www.tetramais.com.br/organogramas/img/larissa_soares.jpg",
-        "Alana Souza": "https://www.tetramais.com.br/organogramas/img/Alana-Souza.png",
-        "Fabricio Aguiar": "https://www.tetramais.com.br/organogramas/img/Fabricio_Aguiar.png",
-        "Beatriz Silveira": "https://www.tetramais.com.br/organogramas/img/beatriz_silveira.png",
-        "Daiani de Mattos": "https://www.tetramais.com.br/organogramas/img/Daiani_de_mattos.png",
-        "Rodrigo Alves": "https://www.tetramais.com.br/organogramas/img/rodrigo_alves.png",
-        "Ana Lia Quaggio": "https://www.tetramais.com.br/organogramas/img/analia_quaggio.png",
-        "Nathalia Bottozzi": "https://www.tetramais.com.br/organogramas/img/nathalia_botozzi.png",
-        "Projeto Statkraft": "https://www.tetramais.com.br/organogramas/img/statkraft.png",
-        "Projeto Samarco": "https://www.tetramais.com.br/organogramas/img/samarco.png",
-        "Projeto Nesa": "https://www.tetramais.com.br/organogramas/img/NESA.png",
-        "Projeto Atlas": "https://www.tetramais.com.br/organogramas/img/atlas.png",
-        "Projeto Asa Branca": "https://www.tetramais.com.br/organogramas/img/engie.png",
-        "Projeto Alupar": "https://www.tetramais.com.br/organogramas/img/pjt_alupar.png",
-        "Projeto TR SP": "https://www.tetramais.com.br/organogramas/img/edge.png",
+      if (state.docStatus === "pendencias") {
+        return {
+          nextStep: "Responder exigências priorizadas",
+          deadline: "até 3 dias úteis para consolidar respostas",
+          owner: "Analista responsável + jurídico regulatório"
+        };
+      }
 
-        // adicione todos os nomes necessários
+      if (state.decision === "deferido") {
+        return {
+          nextStep: "Taxa + publicação + arquivamento",
+          deadline: "em até 2 dias úteis após deferimento",
+          owner: "Gestor de licenciamento"
+        };
+      }
+
+      return {
+        nextStep: "Monitorar análise e preparar evidências",
+        deadline: "revisão semanal do processo",
+        owner: "Equipe técnica do projeto"
       };
-
-      // Se existir imagem específica:
-      if (fotos[node.name]) return fotos[node.name];
-
-      // Caso contrário, usa uma imagem genérica por tipo:
-      switch (node.tipo) {
-        case "ceo": return "imagens/ceo.jpg";
-        case "gerente": return "imagens/gerente.jpg";
-        case "coordenador": return "imagens/coordenador.jpg";
-        case "analista": return "imagens/analista.jpg";
-        case "projeto": return "imagens/equipe.jpg";
-        default: return "imagens/default.jpg";
-      }
     }
 
+    function renderLicenseCards() {
+      const host = document.getElementById("licenseCards");
+      host.innerHTML = Object.entries(LICENSES).map(([key, item]) => `
+        <article tabindex="0" class="card license-card ${state.license === key ? "active" : ""}" data-license="${key}">
+          <h2>${item.title}</h2>
+          <p>${item.purpose}</p>
+        </article>
+      `).join("");
 
-    function createCard(node, parentId, cardId) {
-      const hasChildren = node.children && node.children.length > 0;
-      const hasMembros = node.membros && node.membros.length > 0;
-      
-      let html = `<div class="card ${node.tipo}" id="${cardId}" data-name="${node.name.toLowerCase()}">
-        <div class="card-header">
-          <div class="photo">
-            <img src="${getPhoto(node)}" alt="${node.name}" />
-          </div>
-          <div class="card-info">
-            <h3 class="card-name">${node.name}</h3>
-            <p class="card-role">${node.cargo}</p>
-          </div>
-        </div>`;
-      
-      if (hasChildren && node.tipo === 'gerente') {
-        html += `<div class="expand-icon" onclick="toggleGerente('${cardId}')">+</div>`;
-      } else if (hasChildren && node.tipo === 'coordenador') {
-        html += `<div class="expand-icon" onclick="toggleCoordenador('${cardId}')">+</div>`;
-      } else if (hasMembros) {
-        html += `<div class="expand-icon" onclick="showMembers('${node.name}', ${JSON.stringify(node.membros).replace(/"/g, '&quot;')})">👥</div>`;
-      }
-      
-      html += `</div>`;
-      return html;
-    }
+      host.querySelectorAll(".license-card").forEach(card => {
+        const selectCard = () => {
+          state.license = card.dataset.license;
+          document.getElementById("licenseType").value = state.license;
+          renderAll();
+        };
 
-    function renderGerentes() {
-      return estrutura.children.map((g, i) => createCard(g, 'ceo-card', `gerente-${i}`)).join('');
-    }
-
-    function toggleGerente(gerenteId) {
-      const coordRow = document.getElementById('coords-row');
-      const subRow = document.getElementById('sub-row');
-      const icon = document.querySelector(`#${gerenteId} .expand-icon`);
-      
-      if (activeGerente === gerenteId) {
-        coordRow.innerHTML = '';
-        coordRow.classList.add('hidden');
-        if (subRow) subRow.innerHTML = '';
-        if (subRow) subRow.classList.add('hidden');
-        icon.textContent = '+';
-        icon.classList.remove('expanded');
-        document.querySelector(`#${gerenteId}`).classList.remove('active');
-        activeGerente = null;
-        activeCoordenador = null;
-        return;
-      }
-      
-      document.querySelectorAll('.card.gerente').forEach(c => c.classList.remove('active'));
-      document.querySelector(`#${gerenteId}`).classList.add('active');
-      
-      const gerenteIndex = parseInt(gerenteId.split('-')[1]);
-      const gerente = estrutura.children[gerenteIndex];
-      
-      if (gerente.children) {
-        coordRow.innerHTML = gerente.children.map((c, i) => 
-          createCard(c, gerenteId, `coord-${gerenteIndex}-${i}`)
-        ).join('');
-        coordRow.classList.remove('hidden');
-        
-        if (subRow) {
-          subRow.innerHTML = '';
-          subRow.classList.add('hidden');
-        }
-      }
-      
-      document.querySelectorAll('.expand-icon').forEach(ic => {
-        if (ic.textContent === '+') ic.textContent = '+';
-        ic.classList.remove('expanded');
-      });
-      
-      icon.textContent = '−';
-      icon.classList.add('expanded');
-      activeGerente = gerenteId;
-      activeCoordenador = null;
-    }
-
-    function toggleCoordenador(coordId) {
-      const subRow = document.getElementById('sub-row');
-      const icon = document.querySelector(`#${coordId} .expand-icon`);
-      
-      if (activeCoordenador === coordId) {
-        subRow.innerHTML = '';
-        subRow.classList.add('hidden');
-        icon.textContent = '+';
-        icon.classList.remove('expanded');
-        document.querySelector(`#${coordId}`).classList.remove('active');
-        activeCoordenador = null;
-        return;
-      }
-      
-      document.querySelectorAll('.card.coordenador').forEach(c => c.classList.remove('active'));
-      document.querySelector(`#${coordId}`).classList.add('active');
-      
-      const parts = coordId.split('-');
-      const gerenteIndex = parseInt(parts[1]);
-      const coordIndex = parseInt(parts[2]);
-      
-      const gerente = estrutura.children[gerenteIndex];
-      const coord = gerente.children[coordIndex];
-      
-      if (coord.children) {
-        subRow.innerHTML = coord.children.map((sub, i) => 
-          createCard(sub, coordId, `sub-${gerenteIndex}-${coordIndex}-${i}`)
-        ).join('');
-        subRow.classList.remove('hidden');
-      }
-      
-      document.querySelectorAll('.card.coordenador .expand-icon').forEach(ic => {
-        ic.textContent = '+';
-        ic.classList.remove('expanded');
-      });
-      
-      icon.textContent = '−';
-      icon.classList.add('expanded');
-      activeCoordenador = coordId;
-    }
-
-    function showMembers(title, members) {
-      document.getElementById('modalTitle').textContent = title;
-      const list = document.getElementById('memberList');
-      list.innerHTML = members.map(m => `<li class="member-item">${m}</li>`).join('');
-      document.getElementById('modal').classList.add('active');
-    }
-
-    function closeModal(event) {
-      if (!event || event.target.id === 'modal') {
-        document.getElementById('modal').classList.remove('active');
-      }
-    }
-
-    function expandAll() {
-      estrutura.children.forEach((g, i) => {
-        if (g.children && g.children.length > 0) {
-          toggleGerente(`gerente-${i}`);
-        }
+        card.addEventListener("click", selectCard);
+        card.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectCard();
+          }
+        });
       });
     }
 
-    function collapseAll() {
-      const coordRow = document.getElementById('coords-row');
-      const subRow = document.getElementById('sub-row');
-      coordRow.innerHTML = '';
-      coordRow.classList.add('hidden');
-      subRow.innerHTML = '';
-      subRow.classList.add('hidden');
-      
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-      document.querySelectorAll('.expand-icon').forEach(ic => {
-        if (ic.textContent !== '👥') {
-          ic.textContent = '+';
-          ic.classList.remove('expanded');
-        }
-      });
-      
-      activeGerente = null;
-      activeCoordenador = null;
-    }
+    function buildActions() {
+      const actions = [];
 
-    function searchEmployee(query) {
-      const allCards = document.querySelectorAll('.card');
-      query = query.toLowerCase().trim();
-      
-      if (!query) {
-        allCards.forEach(c => c.classList.remove('hidden'));
-        return;
+      if (state.docStatus === "inicial") {
+        actions.push("Abrir plano de trabalho da licença com responsáveis e prazos por órgão.");
+        actions.push("Confirmar estudo ambiental exigido para o rito do órgão selecionado.");
       }
-      
-      allCards.forEach(c => {
-        const name = c.getAttribute('data-name');
-        if (name && name.includes(query)) {
-          c.classList.remove('hidden');
-        } else {
-          c.classList.add('hidden');
-        }
-      });
+
+      if (state.docStatus === "pendencias") {
+        actions.push("Consolidar exigências em matriz única e responder por prioridade de risco.");
+      }
+
+      if (state.decision === "analise") actions.push("Monitorar semanalmente o andamento do processo no sistema do órgão.");
+      if (state.decision === "deferido") actions.push("Executar pagamento, publicação legal e arquivo dos comprovantes.");
+      if (state.decision === "indeferido") actions.push("Preparar revisão/recurso com base no parecer e protocolar no prazo regulamentar.");
+
+      if (state.license === "LI") actions.push("Acompanhar indicadores da fase de implantação e condicionantes de obra.");
+      if (state.license === "LO") actions.push("Ativar rotina de renovação antecipada e controle periódico de condicionantes.");
+
+      actions.push(`Validar rito específico do ${state.agency} antes do próximo protocolo.`);
+      return actions;
     }
 
-    function init() {
-      const tree = document.getElementById('orgTree');
-      tree.innerHTML = `
-        ${renderCEO()}
-        <div class="connector"></div>
-        <div class="level-row" id="gerentes-row">${renderGerentes()}</div>
-        <div class="connector hidden" id="conn-coord"></div>
-        <div class="level-row hidden" id="coords-row"></div>
-        <div class="connector hidden" id="conn-sub"></div>
-        <div class="level-row hidden" id="sub-row"></div>
+    function renderOrgSpecifics() {
+      const org = ORGAOS[state.agency];
+      const host = document.getElementById("orgSpecifics");
+      host.innerHTML = org.points.map(([title, desc], idx) => `
+        <details ${idx === 0 ? "open" : ""}>
+          <summary>${title}</summary>
+          <div class="content">${desc}</div>
+        </details>
+      `).join("");
+    }
+
+    function renderPanel() {
+      const lic = LICENSES[state.license] || LICENSES.LP;
+      const org = ORGAOS[state.agency] || ORGAOS.IBAMA;
+
+      document.getElementById("panelTitle").textContent = `${lic.title} • ${state.agency}`;
+      document.getElementById("panelDescription").textContent = lic.purpose;
+      document.getElementById("agencyScope").textContent = `Escopo: ${org.scope}`;
+
+      const [docText, docClass] = statusMap[state.docStatus];
+      const [decText, decClass] = statusMap[state.decision];
+      document.getElementById("statusLine").innerHTML = `
+        <span class="status ${docClass}">${docText}</span>
+        <span class="status ${decClass}">${decText}</span>
       `;
+
+      const summary = getSummary();
+      const riskStep = getRiskAndStep();
+
+      document.getElementById("summaryNextStep").textContent = summary.nextStep;
+      document.getElementById("summaryDeadline").textContent = summary.deadline;
+      document.getElementById("summaryRisk").textContent = riskStep.risk;
+      document.getElementById("summaryOwner").textContent = summary.owner;
+
+      document.getElementById("progressLabel").textContent = `Andamento estimado: etapa ${riskStep.step} de 5`;
+      document.getElementById("progressBar").style.width = `${(riskStep.step / 5) * 100}%`;
+
+      document.getElementById("orgTitle").textContent = `Como o ${state.agency} trata este processo`;
+      document.getElementById("orgProcedure").textContent = org[state.license];
+
+      const query = state.search.trim().toLowerCase();
+      const filtered = lic.timeline.filter(([title, desc]) => {
+        if (!query) return true;
+        return `${title} ${desc}`.toLowerCase().includes(query) || org[state.license].toLowerCase().includes(query);
+      });
+
+      document.getElementById("timeline").innerHTML = filtered.map(([title, desc]) => `
+        <li><strong>${title}</strong>${desc}</li>
+      `).join("") || "<li><strong>Nenhum item encontrado.</strong>Refine os termos da busca.</li>";
+
+      document.getElementById("actions").innerHTML = buildActions().map(action => `<li>${action}</li>`).join("");
+
+      document.getElementById("requiredDocs").innerHTML = lic.docs.required.map(item => `<span class='tag'>${item}</span>`).join("");
+      document.getElementById("recommendedDocs").innerHTML = lic.docs.recommended.map(item => `<span class='tag'>${item}</span>`).join("");
+
+      renderOrgSpecifics();
     }
 
-    init();
+    function syncStateFromControls() {
+      const licenseInput = document.getElementById("licenseType");
+      const agencyInput = document.getElementById("agency");
+      const docInput = document.getElementById("docStatus");
+      const decisionInput = document.getElementById("agencyDecision");
+      const searchInput = document.getElementById("search");
+
+      state.license = licenseInput?.value || initialState.license;
+      state.agency = agencyInput?.value || initialState.agency;
+      state.docStatus = docInput?.value || initialState.docStatus;
+      state.decision = decisionInput?.value || initialState.decision;
+      state.search = searchInput?.value || "";
+    }
+
+    function resetFilters() {
+      Object.assign(state, initialState);
+      document.getElementById("licenseType").value = state.license;
+      document.getElementById("agency").value = state.agency;
+      document.getElementById("docStatus").value = state.docStatus;
+      document.getElementById("agencyDecision").value = state.decision;
+      document.getElementById("search").value = "";
+      state.search = "";
+      renderAll();
+    }
+
+    function bindControls() {
+      const licenseSelect = document.getElementById("licenseType");
+      licenseSelect.innerHTML = Object.keys(LICENSES).map(key => `<option value='${key}'>${LICENSES[key].title}</option>`).join("");
+
+      const agencySelect = document.getElementById("agency");
+      agencySelect.innerHTML = Object.keys(ORGAOS).map(key => `<option value='${key}'>${key}</option>`).join("");
+
+      licenseSelect.addEventListener("change", e => {
+        state.license = e.target.value;
+        renderAll();
+      });
+
+      agencySelect.addEventListener("change", e => {
+        state.agency = e.target.value;
+        renderPanel();
+      });
+
+      document.getElementById("docStatus").addEventListener("change", () => {
+        syncStateFromControls();
+        renderPanel();
+      });
+
+      document.getElementById("agencyDecision").addEventListener("change", () => {
+        syncStateFromControls();
+        renderPanel();
+      });
+
+      document.getElementById("search").addEventListener("input", () => {
+        syncStateFromControls();
+        renderPanel();
+      });
+
+      document.getElementById("simulateBtn").addEventListener("click", () => {
+        syncStateFromControls();
+        renderPanel();
+      });
+      document.getElementById("resetBtn").addEventListener("click", resetFilters);
+    }
+
+    function renderAll() {
+      renderLicenseCards();
+      renderPanel();
+    }
+
+    bindControls();
+    renderAll();
   </script>
 </body>
 </html>
