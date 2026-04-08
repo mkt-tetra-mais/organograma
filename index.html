@@ -3,6 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guia Interativo de Licenciamento por Órgão (LP, LI e LO)</title>
+  <style>
+    :root {
+      --bg: #eef4fa;
+      --surface: #ffffff;
+      --text: #122030;
+      --muted: #47586b;
+      --primary: #003b70;
+      --secondary: #0ea5be;
+      --ok: #2da96d;
+      --warn: #e0a33a;
+      --danger: #d94f4f;
+      --line: #cad8e7;
+      --focus: #2563eb;
+      --radius: 14px;
+      --shadow: 0 10px 26px rgba(0, 38, 77, .1);
+    }
+
+    * { box-sizing: border-box; }
   <title>Painel de Licenciamento Ambiental (LP, LI e LO)</title>
   <style>
     :root {
@@ -28,6 +47,17 @@
       margin: 0;
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
       color: var(--text);
+      background: linear-gradient(#f8fcff, #edf3f9);
+    }
+
+    .container {
+      width: min(1260px, 95vw);
+      margin: 0 auto;
+      padding: 24px 0 42px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #003b70, #0b5f97);
       background: radial-gradient(circle at top, #f7fbff 0%, var(--bg) 55%);
     }
 
@@ -43,6 +73,11 @@
       border-radius: 18px;
       padding: 24px;
       box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .hero h1 { margin: 0; font-size: clamp(1.25rem, 2.3vw, 2rem); }
+    .hero p { margin: 10px 0 0; color: #d4e8f8; line-height: 1.5; }
       margin-bottom: 18px;
     }
 
@@ -76,6 +111,39 @@
       padding: 16px;
     }
 
+    .grid { display: grid; gap: 14px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+    .license-card {
+      border-left: 6px solid transparent;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .license-card.active,
+    .license-card:hover {
+      transform: translateY(-2px);
+      border-left-color: var(--secondary);
+    }
+
+    .license-card h2 { margin: 0; font-size: 1.08rem; color: var(--primary); }
+    .license-card p { margin: 7px 0 0; color: var(--muted); }
+
+    .wizard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .wizard-step {
+      border: 1px dashed #9bb8d5;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #244764;
+      background: #f5fbff;
+      font-size: .9rem;
+      font-weight: 700;
     .license-card {
       border-left: 6px solid transparent;
       cursor: pointer;
@@ -110,6 +178,57 @@
 
     .control label {
       display: block;
+      margin-bottom: 6px;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    select, input, button {
+      width: 100%;
+      border: 1px solid #bccfe2;
+      border-radius: 10px;
+      background: #fff;
+      font-size: .96rem;
+      padding: 10px 12px;
+      color: var(--text);
+    }
+
+    button { cursor: pointer; font-weight: 700; }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--primary);
+    }
+
+    select:focus-visible,
+    input:focus-visible,
+    button:focus-visible,
+    .license-card:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .scope {
+      margin-top: 8px;
+      font-size: .9rem;
+      color: #28537a;
+      background: #f0f8ff;
+      border: 1px solid #bed3e8;
+      border-radius: 10px;
+      padding: 9px 10px;
+    }
+
+    .main {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
       font-size: 0.84rem;
       color: var(--muted);
       margin-bottom: 6px;
@@ -147,6 +266,152 @@
       align-items: start;
     }
 
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin: 10px 0 6px;
+    }
+
+    .summary-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #f8fbff;
+    }
+
+    .summary-item span {
+      display: block;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .summary-item strong { font-size: .95rem; }
+
+    .status {
+      display: inline-block;
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 6px 10px;
+      margin: 0 6px 6px 0;
+    }
+
+    .ok { background: var(--ok); }
+    .warn { background: var(--warn); }
+    .danger { background: var(--danger); }
+    .info { background: var(--secondary); }
+
+    .progress-wrap {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fcfeff;
+    }
+
+    .progress-label {
+      font-size: .86rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .progress {
+      height: 12px;
+      width: 100%;
+      border-radius: 999px;
+      background: #e5edf6;
+      overflow: hidden;
+    }
+
+    .progress > div {
+      height: 100%;
+      background: linear-gradient(90deg, #1cb5c9, #2e90c3);
+      width: 0;
+      transition: width .2s;
+    }
+
+    .timeline {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .timeline li {
+      position: relative;
+      margin-bottom: 12px;
+      padding-left: 22px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .timeline li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--secondary);
+      position: absolute;
+      left: 0;
+      top: 4px;
+    }
+
+    .timeline strong { color: var(--text); display: block; margin-bottom: 4px; }
+
+    .next-actions { margin: 0; padding-left: 20px; }
+    .next-actions li { margin-bottom: 6px; line-height: 1.45; }
+
+    .tag-group { margin-top: 10px; }
+    .tag-group h4 { margin: 0 0 8px; color: var(--primary); }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag {
+      font-size: .82rem;
+      font-weight: 700;
+      border: 1px solid #bdd1e6;
+      border-radius: 999px;
+      background: #f0f8ff;
+      color: #215581;
+      padding: 6px 10px;
+    }
+
+    .org-box {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f8fbff;
+      padding: 12px;
+    }
+
+    .org-box h4 { margin: 0 0 8px; color: var(--primary); }
+
+    .accordion details {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      margin-bottom: 8px;
+    }
+
+    .accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 11px 13px;
+      background: #f5fbff;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .accordion summary::-webkit-details-marker { display: none; }
+    .accordion .content { padding: 12px 13px; color: var(--muted); line-height: 1.45; }
+
+    @media (max-width: 980px) {
+      .main { grid-template-columns: 1fr; }
     .status {
       display: inline-block;
       border-radius: 999px;
@@ -257,6 +522,10 @@
 <body>
   <div class="container">
     <section class="hero">
+      <h1>Painel de Procedimentos por Órgão Ambiental (LP, LI, LO)</h1>
+      <p>
+        Escolha o tipo de licença, o órgão e a situação atual para receber uma orientação prática:
+        próximos passos, documentos obrigatórios, riscos e fluxo resumido de execução.
       <h1>Assistente de Fluxo de Licenciamento Ambiental (LP, LI e LO)</h1>
       <p>
         Interface informativa para o gestor identificar rapidamente o que fazer em cada fase.
@@ -266,6 +535,39 @@
     </section>
 
     <section class="grid grid-3" id="licenseCards"></section>
+
+    <section class="card">
+      <div class="wizard">
+        <div class="wizard-step">1) Selecione LP, LI ou LO</div>
+        <div class="wizard-step">2) Escolha o órgão ambiental</div>
+        <div class="wizard-step">3) Informe situação e gere o plano</div>
+      </div>
+
+      <div class="controls">
+        <div class="control">
+          <label for="licenseType">Tipo de licença</label>
+          <select id="licenseType"></select>
+        </div>
+
+        <div class="control">
+          <label for="agency">Órgão ambiental</label>
+          <select id="agency"></select>
+          <div class="scope" id="agencyScope"></div>
+        </div>
+
+        <div class="control">
+          <label for="docStatus">Situação da documentação</label>
+          <select id="docStatus">
+            <option value="completa">Completa</option>
+            <option value="pendencias">Com pendências / exigências</option>
+            <option value="inicial">Preparação inicial</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="agencyDecision">Situação da análise</label>
+          <select id="agencyDecision">
+            <option value="analise">Em análise</option>
 
     <section class="card">
       <div class="controls">
@@ -289,6 +591,59 @@
             <option value="indeferido">Indeferido</option>
           </select>
         </div>
+
+        <div class="control">
+          <label for="search">Busca por etapa/termo</label>
+          <input id="search" placeholder="Ex.: EIA, vistoria, supressão" />
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+        <button class="btn-primary" id="simulateBtn">Gerar plano do cenário</button>
+        <button class="btn-secondary" id="resetBtn">Limpar filtros</button>
+      </div>
+    </section>
+
+    <section class="main">
+      <article class="card">
+        <h2 id="panelTitle" style="margin:0; color:var(--primary);"></h2>
+        <p id="panelDescription" style="color:var(--muted);"></p>
+
+        <div id="statusLine" style="margin-top:8px;"></div>
+
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span>Próximo passo prioritário</span>
+            <strong id="summaryNextStep"></strong>
+          </div>
+          <div class="summary-item">
+            <span>Prazos internos sugeridos</span>
+            <strong id="summaryDeadline"></strong>
+          </div>
+          <div class="summary-item">
+            <span>Nível de risco atual</span>
+            <strong id="summaryRisk"></strong>
+          </div>
+          <div class="summary-item">
+            <span>Responsável recomendado</span>
+            <strong id="summaryOwner"></strong>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label" id="progressLabel"></div>
+          <div class="progress"><div id="progressBar"></div></div>
+        </div>
+
+        <div class="org-box">
+          <h4 id="orgTitle"></h4>
+          <div id="orgProcedure" style="color:var(--muted); line-height:1.45;"></div>
+        </div>
+
+        <h3 style="margin:14px 0 8px; color:var(--primary);">Fluxo resumido</h3>
+        <ul class="timeline" id="timeline"></ul>
+
+        <h3 style="margin:12px 0 8px; color:var(--primary);">Próximas ações para o gestor</h3>
         <div class="control">
           <label for="search">Busca rápida por atividade</label>
           <input id="search" placeholder="Ex.: supressão de vegetação" />
@@ -312,6 +667,18 @@
       </article>
 
       <aside class="card">
+        <div class="tag-group">
+          <h4>Documentos obrigatórios</h4>
+          <div class="tag-list" id="requiredDocs"></div>
+        </div>
+
+        <div class="tag-group">
+          <h4>Documentos recomendados</h4>
+          <div class="tag-list" id="recommendedDocs"></div>
+        </div>
+
+        <h3 style="margin:16px 0 8px; color:var(--primary);">Pontos por órgão</h3>
+        <div class="accordion" id="orgSpecifics"></div>
         <h3 style="margin-top:0; color: var(--primary);">Documentos e pontos de controle</h3>
         <div class="docs" id="documents"></div>
 
@@ -324,6 +691,237 @@
     const LICENSES = {
       LP: {
         title: "LP — Licença Prévia",
+        purpose: "Avalia viabilidade ambiental e define condicionantes iniciais.",
+        timeline: [
+          ["Protocolo", "Formalizar requerimento e registrar processo no órgão competente."],
+          ["Triagem", "Órgão valida documentos técnicos mínimos e enquadramento."],
+          ["Análise técnica", "Parecer sobre impactos, alternativas e medidas de controle."],
+          ["Exigências", "Complementar estudos e responder notificações no prazo."],
+          ["Conclusão", "Deferimento/indeferimento, taxa e publicação legal."]
+        ],
+        docs: {
+          required: ["Requerimento", "Estudo ambiental", "ART/RRT", "Mapa e memorial", "Comprovante de taxa"],
+          recommended: ["Matriz de condicionantes preliminar", "Plano de resposta a exigências", "Cronograma macro"]
+        }
+      },
+      LI: {
+        title: "LI — Licença de Instalação",
+        purpose: "Autoriza implantação e execução de programas ambientais.",
+        timeline: [
+          ["Requerimento LI", "Protocolar plano de obras e programas ambientais."],
+          ["Validação técnica", "Conferência de PBA/PCA e autorizações associadas."],
+          ["Diligências", "Atendimento de exigências e ajustes de projeto."],
+          ["Publicação", "Após deferimento, recolher taxa e publicar atos legais."],
+          ["Emissão LI", "Implantação com monitoramento de condicionantes."]
+        ],
+        docs: {
+          required: ["PBA/PCA", "Cronograma de implantação", "Plano de monitoramento", "Autorizações complementares", "Relatório de atendimento"],
+          recommended: ["Plano de gestão de risco de obra", "Checklist de evidências de campo", "Plano de comunicação com órgão"]
+        }
+      },
+      LO: {
+        title: "LO — Licença de Operação",
+        purpose: "Autoriza operação com base no cumprimento da LI e desempenho ambiental.",
+        timeline: [
+          ["Solicitação LO", "Protocolar relatório de cumprimento das condicionantes da LI."],
+          ["Checagem", "Conferir indicadores, monitoramentos e compensações."],
+          ["Vistoria", "Órgão pode vistoriar e solicitar ajustes finais."],
+          ["Ato final", "Deferimento, taxa e publicação oficial."],
+          ["Pós-emissão", "Operação com controle periódico e planejamento da renovação."]
+        ],
+        docs: {
+          required: ["Relatório consolidado LI", "Laudos de monitoramento", "Comprovação de compensação", "Taxa da licença", "Publicações legais"],
+          recommended: ["Painel de renovação", "Plano de auditorias", "Matriz de não conformidades"]
+        }
+      }
+    };
+
+    const ORGAOS = {
+      IBAMA: {
+        scope: "Impacto nacional/interestadual, mar territorial ou terras federais.",
+        LP: "Geralmente exige TR formal e estudos robustos; pode ocorrer audiência pública.",
+        LI: "Foco em programas executivos, autorizações federais associadas e rastreabilidade das evidências.",
+        LO: "Comprovação consolidada de condicionantes e efetividade dos programas ambientais.",
+        points: [
+          ["Comunicações oficiais", "Responder via sistema federal dentro dos prazos de ofício."],
+          ["Evidências", "Manter matriz de condicionantes com anexos e responsáveis."],
+          ["Risco recorrente", "Atraso em complementações técnicas amplia prazo de análise."]
+        ]
+      },
+      CETESB: {
+        scope: "Licenciamento estadual no estado de São Paulo.",
+        LP: "Análise por agência/diretoria técnica com atenção ao enquadramento da tipologia.",
+        LI: "Ênfase em controle de obra, resíduos, efluentes e autorizações vinculadas.",
+        LO: "Checagem de desempenho operacional e conformidade para operação regular.",
+        points: [
+          ["Taxas/publicações", "Conferir prazos de pagamento e publicação do rito estadual."],
+          ["Padronização", "Anexos padronizados evitam exigências de forma."],
+          ["Risco recorrente", "Inconsistência documental aumenta retrabalho."]
+        ]
+      },
+      INEA: {
+        scope: "Licenciamento estadual no estado do Rio de Janeiro.",
+        LP: "Pode exigir documentação locacional e programas preliminares de mitigação.",
+        LI: "Verifica coerência entre projeto, condicionantes e monitoramentos de implantação.",
+        LO: "Requer comprovação detalhada de execução de condicionantes e desempenho.",
+        points: [
+          ["Controle de prazos", "Gerenciar vencimentos de exigências para evitar paralisação."],
+          ["Qualidade técnica", "Relatórios objetivos e georreferenciados aceleram análise."],
+          ["Risco recorrente", "Pendências da LI atrasam deferimento da LO."]
+        ]
+      },
+      IEMA: {
+        scope: "Licenciamento estadual no estado do Espírito Santo.",
+        LP: "Ênfase na consistência entre estudo ambiental e condicionantes iniciais.",
+        LI: "Avalia execução dos programas e controles ambientais da fase de obra.",
+        LO: "Exige relatório consolidado de condicionantes e resultados de desempenho.",
+        points: [
+          ["Gestão interna", "Cronograma único por fase (LP, LI, LO)."],
+          ["Protocolos", "Conferir anexos obrigatórios antes do envio."],
+          ["Risco recorrente", "Falha de evidência de campo gera nova diligência."]
+        ]
+      },
+      SEMAD: {
+        scope: "Licenciamento estadual em Minas Gerais e regionais.",
+        LP: "Análise de viabilidade com foco em estudos e condicionantes por porte/tipologia.",
+        LI: "Aderência dos planos executivos e atendimento das condicionantes da LP.",
+        LO: "Efetividade dos programas implantados e condicionantes periódicas de operação.",
+        points: [
+          ["Governança", "Definir dono por condicionante e reporte mensal."],
+          ["Auditoria", "Validar evidências internamente antes do protocolo."],
+          ["Risco recorrente", "Perda de prazo de ofício pode levar a indeferimento/arquivamento."]
+        ]
+      }
+    };
+
+    const statusMap = {
+      completa: ["Documentação completa", "ok"],
+      pendencias: ["Pendências em aberto", "warn"],
+      inicial: ["Preparação inicial", "info"],
+      analise: ["Órgão em análise", "info"],
+      deferido: ["Processo deferido", "ok"],
+      indeferido: ["Processo indeferido", "danger"]
+    };
+
+    const initialState = {
+      license: "LP",
+      agency: "IBAMA",
+      docStatus: "completa",
+      decision: "analise",
+      search: ""
+    };
+
+    const state = { ...initialState };
+    let searchTimer = null;
+
+    function getRiskAndStep() {
+      if (state.decision === "indeferido") return { risk: "Alto", step: 2 };
+      if (state.docStatus === "pendencias") return { risk: "Médio", step: 3 };
+      if (state.decision === "deferido") return { risk: "Baixo", step: 5 };
+      if (state.docStatus === "inicial") return { risk: "Médio", step: 1 };
+      return { risk: "Baixo", step: 4 };
+    }
+
+    function getSummary() {
+      if (state.decision === "indeferido") {
+        return {
+          nextStep: "Preparar recurso técnico",
+          deadline: "até 5 dias úteis para rascunho interno",
+          owner: "Coordenação de Licenciamento"
+        };
+      }
+
+      if (state.docStatus === "pendencias") {
+        return {
+          nextStep: "Responder exigências priorizadas",
+          deadline: "até 3 dias úteis para consolidar respostas",
+          owner: "Analista responsável + jurídico regulatório"
+        };
+      }
+
+      if (state.decision === "deferido") {
+        return {
+          nextStep: "Taxa + publicação + arquivamento",
+          deadline: "em até 2 dias úteis após deferimento",
+          owner: "Gestor de licenciamento"
+        };
+      }
+
+      return {
+        nextStep: "Monitorar análise e preparar evidências",
+        deadline: "revisão semanal do processo",
+        owner: "Equipe técnica do projeto"
+      };
+    }
+
+    function renderLicenseCards() {
+      const host = document.getElementById("licenseCards");
+      host.innerHTML = Object.entries(LICENSES).map(([key, item]) => `
+        <article tabindex="0" class="card license-card ${state.license === key ? "active" : ""}" data-license="${key}">
+          <h2>${item.title}</h2>
+          <p>${item.purpose}</p>
+        </article>
+      `).join("");
+
+      host.querySelectorAll(".license-card").forEach(card => {
+        const selectCard = () => {
+          state.license = card.dataset.license;
+          document.getElementById("licenseType").value = state.license;
+          renderAll();
+        };
+
+        card.addEventListener("click", selectCard);
+        card.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectCard();
+          }
+        });
+      });
+    }
+
+    function buildActions() {
+      const actions = [];
+
+      if (state.docStatus === "inicial") {
+        actions.push("Abrir plano de trabalho da licença com responsáveis e prazos por órgão.");
+        actions.push("Confirmar estudo ambiental exigido para o rito do órgão selecionado.");
+      }
+
+      if (state.docStatus === "pendencias") {
+        actions.push("Consolidar exigências em matriz única e responder por prioridade de risco.");
+      }
+
+      if (state.decision === "analise") actions.push("Monitorar semanalmente o andamento do processo no sistema do órgão.");
+      if (state.decision === "deferido") actions.push("Executar pagamento, publicação legal e arquivo dos comprovantes.");
+      if (state.decision === "indeferido") actions.push("Preparar revisão/recurso com base no parecer e protocolar no prazo regulamentar.");
+
+      if (state.license === "LI") actions.push("Acompanhar indicadores da fase de implantação e condicionantes de obra.");
+      if (state.license === "LO") actions.push("Ativar rotina de renovação antecipada e controle periódico de condicionantes.");
+
+      actions.push(`Validar rito específico do ${state.agency} antes do próximo protocolo.`);
+      return actions;
+    }
+
+    function renderOrgSpecifics() {
+      const org = ORGAOS[state.agency];
+      const host = document.getElementById("orgSpecifics");
+      host.innerHTML = org.points.map(([title, desc], idx) => `
+        <details ${idx === 0 ? "open" : ""}>
+          <summary>${title}</summary>
+          <div class="content">${desc}</div>
+        </details>
+      `).join("");
+    }
+
+    function renderPanel() {
+      const lic = LICENSES[state.license];
+      const org = ORGAOS[state.agency];
+
+      document.getElementById("panelTitle").textContent = `${lic.title} • ${state.agency}`;
+      document.getElementById("panelDescription").textContent = lic.purpose;
+      document.getElementById("agencyScope").textContent = `Escopo: ${org.scope}`;
+
         purpose: "Avaliar viabilidade ambiental e aprovar diretrizes para o empreendimento.",
         timeline: [
           ["Protocolo do requerimento", "Cadastrar pedido, conferir enquadramento e anexos obrigatórios."],
@@ -463,6 +1061,85 @@
         <span class="status ${decClass}">${decText}</span>
       `;
 
+      const summary = getSummary();
+      const riskStep = getRiskAndStep();
+
+      document.getElementById("summaryNextStep").textContent = summary.nextStep;
+      document.getElementById("summaryDeadline").textContent = summary.deadline;
+      document.getElementById("summaryRisk").textContent = riskStep.risk;
+      document.getElementById("summaryOwner").textContent = summary.owner;
+
+      document.getElementById("progressLabel").textContent = `Andamento estimado: etapa ${riskStep.step} de 5`;
+      document.getElementById("progressBar").style.width = `${(riskStep.step / 5) * 100}%`;
+
+      document.getElementById("orgTitle").textContent = `Como o ${state.agency} trata este processo`;
+      document.getElementById("orgProcedure").textContent = org[state.license];
+
+      const query = state.search.trim().toLowerCase();
+      const filtered = lic.timeline.filter(([title, desc]) => {
+        if (!query) return true;
+        return `${title} ${desc}`.toLowerCase().includes(query) || org[state.license].toLowerCase().includes(query);
+      });
+
+      document.getElementById("timeline").innerHTML = filtered.map(([title, desc]) => `
+        <li><strong>${title}</strong>${desc}</li>
+      `).join("") || "<li><strong>Nenhum item encontrado.</strong>Refine os termos da busca.</li>";
+
+      document.getElementById("actions").innerHTML = buildActions().map(action => `<li>${action}</li>`).join("");
+
+      document.getElementById("requiredDocs").innerHTML = lic.docs.required.map(item => `<span class='tag'>${item}</span>`).join("");
+      document.getElementById("recommendedDocs").innerHTML = lic.docs.recommended.map(item => `<span class='tag'>${item}</span>`).join("");
+
+      renderOrgSpecifics();
+    }
+
+    function resetFilters() {
+      Object.assign(state, initialState);
+      document.getElementById("licenseType").value = state.license;
+      document.getElementById("agency").value = state.agency;
+      document.getElementById("docStatus").value = state.docStatus;
+      document.getElementById("agencyDecision").value = state.decision;
+      document.getElementById("search").value = "";
+      renderAll();
+    }
+
+    function bindControls() {
+      const licenseSelect = document.getElementById("licenseType");
+      licenseSelect.innerHTML = Object.keys(LICENSES).map(key => `<option value='${key}'>${LICENSES[key].title}</option>`).join("");
+
+      const agencySelect = document.getElementById("agency");
+      agencySelect.innerHTML = Object.keys(ORGAOS).map(key => `<option value='${key}'>${key}</option>`).join("");
+
+      licenseSelect.addEventListener("change", e => {
+        state.license = e.target.value;
+        renderAll();
+      });
+
+      agencySelect.addEventListener("change", e => {
+        state.agency = e.target.value;
+        renderPanel();
+      });
+
+      document.getElementById("docStatus").addEventListener("change", e => {
+        state.docStatus = e.target.value;
+        renderPanel();
+      });
+
+      document.getElementById("agencyDecision").addEventListener("change", e => {
+        state.decision = e.target.value;
+        renderPanel();
+      });
+
+      document.getElementById("search").addEventListener("input", e => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          state.search = e.target.value;
+          renderPanel();
+        }, 180);
+      });
+
+      document.getElementById("simulateBtn").addEventListener("click", renderPanel);
+      document.getElementById("resetBtn").addEventListener("click", resetFilters);
       const search = state.search.trim().toLowerCase();
       const filteredTimeline = data.timeline.filter(([title, desc]) => {
         if (!search) return true;
