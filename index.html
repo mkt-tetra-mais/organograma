@@ -22,6 +22,26 @@
     }
 
     * { box-sizing: border-box; }
+  <title>Painel de Licenciamento Ambiental (LP, LI e LO)</title>
+  <style>
+    :root {
+      --bg: #eef3f8;
+      --surface: #ffffff;
+      --text: #1f2a37;
+      --muted: #5f6b7a;
+      --primary: #003b70;
+      --secondary: #17a2b8;
+      --ok: #38b16f;
+      --warn: #f59e0b;
+      --danger: #e45757;
+      --line: #d7e0ea;
+      --shadow: 0 8px 26px rgba(0, 38, 77, 0.1);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -38,6 +58,17 @@
 
     .hero {
       background: linear-gradient(145deg, #003b70, #0b5f97);
+      background: radial-gradient(circle at top, #f7fbff 0%, var(--bg) 55%);
+    }
+
+    .container {
+      width: min(1180px, 94vw);
+      margin: 0 auto;
+      padding: 26px 0 40px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #003b70, #0a5a95);
       color: #fff;
       border-radius: 18px;
       padding: 24px;
@@ -47,6 +78,30 @@
 
     .hero h1 { margin: 0; font-size: clamp(1.25rem, 2.3vw, 2rem); }
     .hero p { margin: 10px 0 0; color: #d4e8f8; line-height: 1.5; }
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.4vw, 2rem);
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      color: #dceefd;
+      line-height: 1.45;
+      max-width: 78ch;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-bottom: 18px;
+    }
 
     .card {
       background: var(--surface);
@@ -89,12 +144,36 @@
       background: #f5fbff;
       font-size: .9rem;
       font-weight: 700;
+    .license-card {
+      border-left: 6px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .license-card:hover,
+    .license-card.active {
+      transform: translateY(-2px);
+      border-color: var(--secondary);
+    }
+
+    .license-card h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: var(--primary);
+    }
+
+    .license-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
 
     .controls {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
+      margin-bottom: 16px;
     }
 
     .control label {
@@ -150,6 +229,39 @@
       margin-top: 14px;
       display: grid;
       grid-template-columns: 1.3fr 1fr;
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    select,
+    input,
+    button {
+      width: 100%;
+      border: 1px solid #c8d4e2;
+      background: #fff;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      padding: 10px 12px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #fff;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
       gap: 14px;
       align-items: start;
     }
@@ -300,6 +412,110 @@
 
     @media (max-width: 980px) {
       .main { grid-template-columns: 1fr; }
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      margin-right: 6px;
+    }
+
+    .status.ok { background: var(--ok); }
+    .status.warn { background: var(--warn); }
+    .status.danger { background: var(--danger); }
+    .status.info { background: var(--secondary); }
+
+    .timeline {
+      margin-top: 10px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .timeline li {
+      position: relative;
+      margin: 0 0 14px;
+      padding: 0 0 0 22px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .timeline li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--secondary);
+      position: absolute;
+      left: 0;
+      top: 4px;
+    }
+
+    .timeline li strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .next-actions {
+      margin: 0;
+      padding-left: 20px;
+      line-height: 1.5;
+    }
+
+    .next-actions li {
+      margin-bottom: 6px;
+    }
+
+    .docs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .doc-tag {
+      border: 1px solid #c2d5e8;
+      border-radius: 999px;
+      background: #f3f9ff;
+      color: #1c4f7f;
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .accordion details {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: var(--primary);
+      background: #f7fbff;
+    }
+
+    .accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .accordion .content {
+      padding: 12px 14px 14px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -310,6 +526,11 @@
       <p>
         Escolha o tipo de licença, o órgão e a situação atual para receber uma orientação prática:
         próximos passos, documentos obrigatórios, riscos e fluxo resumido de execução.
+      <h1>Assistente de Fluxo de Licenciamento Ambiental (LP, LI e LO)</h1>
+      <p>
+        Interface informativa para o gestor identificar rapidamente o que fazer em cada fase.
+        Selecione o tipo de licença, a situação da documentação e a decisão do órgão ambiental
+        para receber instruções práticas, checklist e próximos passos.
       </p>
     </section>
 
@@ -347,6 +568,25 @@
           <label for="agencyDecision">Situação da análise</label>
           <select id="agencyDecision">
             <option value="analise">Em análise</option>
+
+    <section class="card">
+      <div class="controls">
+        <div class="control">
+          <label for="licenseType">Tipo de licença</label>
+          <select id="licenseType"></select>
+        </div>
+        <div class="control">
+          <label for="docStatus">Situação da documentação</label>
+          <select id="docStatus">
+            <option value="completa">Completa e protocolada</option>
+            <option value="pendencias">Com pendências / exigências</option>
+            <option value="inicial">Em preparação inicial</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="agencyDecision">Situação no órgão ambiental</label>
+          <select id="agencyDecision">
+            <option value="analise">Em análise técnica</option>
             <option value="deferido">Deferido</option>
             <option value="indeferido">Indeferido</option>
           </select>
@@ -404,6 +644,25 @@
         <ul class="timeline" id="timeline"></ul>
 
         <h3 style="margin:12px 0 8px; color:var(--primary);">Próximas ações para o gestor</h3>
+        <div class="control">
+          <label for="search">Busca rápida por atividade</label>
+          <input id="search" placeholder="Ex.: supressão de vegetação" />
+        </div>
+      </div>
+      <button class="btn-primary" id="simulateBtn">Atualizar orientação</button>
+    </section>
+
+    <section class="main" style="margin-top: 14px;">
+      <article class="card">
+        <h2 id="panelTitle" style="margin-top:0; color: var(--primary);"></h2>
+        <p id="panelDescription" style="color:var(--muted);"></p>
+
+        <div id="statusLine" style="margin: 8px 0 2px;"></div>
+
+        <h3 style="color:var(--primary); margin-bottom:8px;">Linha de execução sugerida</h3>
+        <ul class="timeline" id="timeline"></ul>
+
+        <h3 style="color:var(--primary); margin: 12px 0 8px;">O que fazer agora</h3>
         <ul class="next-actions" id="actions"></ul>
       </article>
 
@@ -420,6 +679,10 @@
 
         <h3 style="margin:16px 0 8px; color:var(--primary);">Pontos por órgão</h3>
         <div class="accordion" id="orgSpecifics"></div>
+        <h3 style="margin-top:0; color: var(--primary);">Documentos e pontos de controle</h3>
+        <div class="docs" id="documents"></div>
+
+        <div class="accordion" style="margin-top: 12px;" id="extraInfo"></div>
       </aside>
     </section>
   </div>
@@ -659,6 +922,138 @@
       document.getElementById("panelDescription").textContent = lic.purpose;
       document.getElementById("agencyScope").textContent = `Escopo: ${org.scope}`;
 
+        purpose: "Avaliar viabilidade ambiental e aprovar diretrizes para o empreendimento.",
+        timeline: [
+          ["Protocolo do requerimento", "Cadastrar pedido, conferir enquadramento e anexos obrigatórios."],
+          ["Triagem técnica inicial", "Checar aderência do EIA/RIMA ou estudos simplificados conforme porte."],
+          ["Atendimento de exigências", "Responder ofícios técnicos, complementar estudos e ajustar memorial."],
+          ["Parecer conclusivo", "Consolidar condicionantes da LP e preparar publicação oficial."],
+          ["Publicação e emissão", "Efetuar pagamento de taxa, publicar no DOE/jornal e guardar comprovantes."]
+        ],
+        docs: ["Requerimento oficial", "EIA/RIMA ou estudo simplificado", "ART/RRT", "Comprovante de taxa", "Publicação DOE/jornal"],
+        alerts: [
+          "As condicionantes da LP serão base para LI; registrar responsáveis e prazos desde já.",
+          "Quando houver audiência pública, organizar respostas técnicas para questionamentos recorrentes."
+        ],
+        faq: [
+          ["Quando a LP vira prioridade crítica?", "Quando há pendências em estudos de fauna/flora, alternativa locacional e impactos cumulativos."],
+          ["Entregáveis finais da LP", "Licença publicada, comprovantes de taxa/publicação e matriz de condicionantes com dono e prazo interno."]
+        ]
+      },
+      LI: {
+        title: "LI — Licença de Instalação",
+        purpose: "Autorizar implantação, obras e programas ambientais previstos na LP.",
+        timeline: [
+          ["Requerimento da LI", "Protocolar plano de implantação com programas ambientais e cronograma executivo."],
+          ["Validação dos planos", "Conferir PBA/PCA, plano de supressão, monitoramentos e autorizações acessórias."],
+          ["Análise e diligências", "Atender exigências técnicas do órgão com revisões documentais e evidências."],
+          ["Deferimento e taxas", "Após deferimento, pagar taxas e formalizar publicação legal."],
+          ["Emissão da LI", "Receber licença e iniciar controle de condicionantes de obra."]
+        ],
+        docs: ["PBA/PCA", "Cronograma de obras", "Plano de supressão", "Autorização de fauna/flora", "Relatório de atendimento"],
+        alerts: [
+          "Executar apenas atividades autorizadas pela LI emitida.",
+          "Atualizar periodicamente os relatórios quantitativos/qualitativos durante a implantação."
+        ],
+        faq: [
+          ["Se houver indeferimento da LI", "Avaliar fundamentos técnicos, preparar revisão em até 20 dias (ou prazo do órgão) e reapresentar documentação."],
+          ["Condição para solicitar LO", "Comprovar atendimento das condicionantes de LI e eficácia dos programas ambientais."]
+        ]
+      },
+      LO: {
+        title: "LO — Licença de Operação",
+        purpose: "Autorizar a operação após comprovação de implantação e controle ambiental efetivo.",
+        timeline: [
+          ["Solicitação da LO", "Protocolar relatório consolidado de condicionantes da LI e resultados operacionais."],
+          ["Checagem documental", "Conferir monitoramentos, autorizações complementares e comprovantes de compensações."],
+          ["Vistoria e análise técnica", "Órgão ambiental pode realizar vistoria e pedir adequações finais."],
+          ["Publicação e quitação", "Pagar taxa de emissão, publicar e juntar comprovantes no processo."],
+          ["Emissão e manutenção", "Operar com acompanhamento contínuo e calendário de renovações/relatórios."]
+        ],
+        docs: ["Relatório de condicionantes", "Comprovantes de monitoramento", "Comprovação de compensação", "Taxa da LO", "Comprovantes de publicação"],
+        alerts: [
+          "Programar renovação da LO com antecedência para evitar operação sem cobertura legal.",
+          "Manter trilha de auditoria de indicadores e evidências para fiscalizações."
+        ],
+        faq: [
+          ["Quando solicitar renovação da LO?", "Usar gatilho interno com meses de antecedência do vencimento e confirmar prazo específico estadual."],
+          ["O que o gestor deve acompanhar após emissão?", "Prazos de relatórios, desempenho ambiental, não conformidades e atendimento a condicionantes periódicas."]
+        ]
+      }
+    };
+
+    const state = {
+      license: "LP",
+      docStatus: "completa",
+      decision: "analise",
+      search: ""
+    };
+
+    const statusMap = {
+      completa: ["Documentação completa", "ok"],
+      pendencias: ["Pendências em aberto", "warn"],
+      inicial: ["Preparação inicial", "info"],
+      analise: ["Órgão em análise", "info"],
+      deferido: ["Deferido", "ok"],
+      indeferido: ["Indeferido", "danger"]
+    };
+
+    function renderLicenseCards() {
+      const host = document.getElementById("licenseCards");
+      host.innerHTML = Object.entries(LICENSES).map(([key, data]) => `
+        <article class="card license-card ${state.license === key ? "active" : ""}" data-license="${key}">
+          <h2>${data.title}</h2>
+          <p>${data.purpose}</p>
+        </article>
+      `).join("");
+
+      host.querySelectorAll(".license-card").forEach(card => {
+        card.addEventListener("click", () => {
+          state.license = card.dataset.license;
+          document.getElementById("licenseType").value = state.license;
+          renderAll();
+        });
+      });
+    }
+
+    function buildActionList() {
+      const actions = [];
+      const lic = state.license;
+
+      if (state.docStatus === "inicial") {
+        actions.push("Mapear responsáveis por estudo, protocolo e interface com órgão ambiental.");
+        actions.push("Criar checklist interno com data, evidência e responsável por item.");
+      }
+
+      if (state.docStatus === "pendencias") {
+        actions.push("Consolidar exigências recebidas em planilha única e definir plano de resposta.");
+        actions.push("Priorizar pendências críticas que bloqueiam parecer técnico.");
+      }
+
+      if (state.decision === "analise") {
+        actions.push("Monitorar processo semanalmente e registrar movimentações formais.");
+      } else if (state.decision === "deferido") {
+        actions.push("Emitir ordem interna para pagamento de taxa, publicação legal e arquivamento de comprovantes.");
+      } else if (state.decision === "indeferido") {
+        actions.push("Preparar defesa técnica com base no parecer e protocolar revisão no prazo do órgão.");
+      }
+
+      if (lic === "LI") {
+        actions.push("Acompanhar execução dos programas ambientais durante a obra com indicadores mensais.");
+      }
+
+      if (lic === "LO") {
+        actions.push("Atualizar painel de condicionantes periódicas e cronograma de renovação da licença.");
+      }
+
+      return actions;
+    }
+
+    function renderPanel() {
+      const data = LICENSES[state.license];
+      document.getElementById("panelTitle").textContent = data.title;
+      document.getElementById("panelDescription").textContent = data.purpose;
+
       const [docText, docClass] = statusMap[state.docStatus];
       const [decText, decClass] = statusMap[state.decision];
       document.getElementById("statusLine").innerHTML = `
@@ -745,6 +1140,65 @@
 
       document.getElementById("simulateBtn").addEventListener("click", renderPanel);
       document.getElementById("resetBtn").addEventListener("click", resetFilters);
+      const search = state.search.trim().toLowerCase();
+      const filteredTimeline = data.timeline.filter(([title, desc]) => {
+        if (!search) return true;
+        return `${title} ${desc}`.toLowerCase().includes(search);
+      });
+
+      document.getElementById("timeline").innerHTML = filteredTimeline.map(([title, desc]) => `
+        <li><strong>${title}</strong>${desc}</li>
+      `).join("") || "<li><strong>Nenhum item encontrado.</strong>Ajuste a busca para ver etapas do fluxo.</li>";
+
+      const actions = buildActionList();
+      document.getElementById("actions").innerHTML = actions.map(action => `<li>${action}</li>`).join("");
+
+      document.getElementById("documents").innerHTML = data.docs.map(doc => `<span class="doc-tag">${doc}</span>`).join("");
+
+      const extra = document.getElementById("extraInfo");
+      extra.innerHTML = `
+        <details open>
+          <summary>Alertas de gestão</summary>
+          <div class="content">
+            <ul style="margin:0; padding-left:20px;">
+              ${data.alerts.map(a => `<li>${a}</li>`).join("")}
+            </ul>
+          </div>
+        </details>
+        ${data.faq.map(([q, a]) => `
+          <details>
+            <summary>${q}</summary>
+            <div class="content">${a}</div>
+          </details>
+        `).join("")}
+      `;
+    }
+
+    function bindControls() {
+      const licenseSelect = document.getElementById("licenseType");
+      licenseSelect.innerHTML = Object.keys(LICENSES).map(key => `<option value="${key}">${LICENSES[key].title}</option>`).join("");
+
+      licenseSelect.addEventListener("change", event => {
+        state.license = event.target.value;
+        renderAll();
+      });
+
+      document.getElementById("docStatus").addEventListener("change", event => {
+        state.docStatus = event.target.value;
+        renderPanel();
+      });
+
+      document.getElementById("agencyDecision").addEventListener("change", event => {
+        state.decision = event.target.value;
+        renderPanel();
+      });
+
+      document.getElementById("search").addEventListener("input", event => {
+        state.search = event.target.value;
+        renderPanel();
+      });
+
+      document.getElementById("simulateBtn").addEventListener("click", renderPanel);
     }
 
     function renderAll() {
